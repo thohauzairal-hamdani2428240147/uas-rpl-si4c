@@ -46,4 +46,13 @@ async function startServer() {
   }
 }
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+} else {
+  // On serverless environment like Vercel, authenticate database on-demand
+  sequelize.authenticate()
+    .then(() => console.log('Database connected on demand (Vercel).'))
+    .catch(err => console.error('Database connection error on Vercel:', err));
+}
+
+module.exports = app;
