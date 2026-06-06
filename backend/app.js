@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('mysql2'); // Force Vercel to bundle mysql2 driver
 const express = require('express');
 const cors = require('cors');
 const { sequelize } = require('./models');
