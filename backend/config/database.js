@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize');
+require('mysql2'); // Force Vercel to bundle mysql2 driver
 const config = require('./config');
 
 const env = process.env.NODE_ENV || 'development';
