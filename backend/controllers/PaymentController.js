@@ -150,6 +150,9 @@ const PaymentController = {
         // 1. Update Pembayaran
         pembayaran.statusBayar = 'Verified';
         pembayaran.tanggalPembayaran = new Date();
+        // Generate E-Ticket Booking Code
+        const generatedCode = `JSC-${pembayaran.id}${Math.floor(1000 + Math.random() * 9000)}`;
+        pembayaran.kodeBooking = generatedCode;
         await pembayaran.save({ transaction });
 
         // 2. Update all associated bookings to Lunas

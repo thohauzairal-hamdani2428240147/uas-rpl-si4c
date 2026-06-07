@@ -23,6 +23,11 @@ const Pembayaran = sequelize.define('Pembayaran', {
   tanggalPembayaran: {
     type: DataTypes.DATE,
     allowNull: true
+  },
+  kodeBooking: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true
   }
 }, {
   tableName: 'pembayaran',

@@ -34,6 +34,9 @@ router.get('/users/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// Route for getting logged-in user's own bookings
+router.get('/my-bookings', authMiddleware, BookingController.getMyBookings);
+
 // Route for creating a booking
 router.post('/', authMiddleware, BookingController.createBooking);
 

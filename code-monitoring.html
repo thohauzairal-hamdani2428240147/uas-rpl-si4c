@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JSC Booking Dashboard - Monitoring Operasional</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hash-pattern {
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(250, 204, 21, 0.1) 10px, rgba(250, 204, 21, 0.1) 20px);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #001f3f;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#221b00",
+                        "tertiary": "#705d00",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary": "#006e0a",
+                        "surface-container-low": "#f2f4f6",
+                        "surface": "#f7f9fb",
+                        "secondary-fixed-dim": "#4ce346",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#4c3f00",
+                        "locked-yellow": "#FACC15",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2d3133",
+                        "surface-dim": "#d8dadc",
+                        "athletic-white": "#FFFFFF",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-primary-container": "#6f88ad",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#544600",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-surface-variant": "#43474e",
+                        "primary-fixed": "#d4e3ff",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-fixed-dim": "#e9c400",
+                        "surface-container": "#eceef0",
+                        "tertiary-container": "#c9a900",
+                        "booked-red": "#E11D48",
+                        "on-primary-fixed-variant": "#2f486a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#001c3a",
+                        "primary-container": "#001f3f",
+                        "surface-dark": "#0F172A",
+                        "outline": "#74777f",
+                        "secondary-container": "#69fd5d",
+                        "inverse-primary": "#afc8f0",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-fixed-variant": "#005306",
+                        "surface-tint": "#476083",
+                        "secondary-fixed": "#75ff68",
+                        "on-background": "#191c1e",
+                        "outline-variant": "#c4c6cf",
+                        "primary-fixed-dim": "#afc8f0",
+                        "on-secondary-container": "#00730b",
+                        "primary": "#000613",
+                        "tertiary-fixed": "#ffe16d",
+                        "on-surface": "#191c1e",
+                        "on-secondary-fixed": "#002201",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "64px",
+                        "unit": "4px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "status-badge": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "status-badge": ["14px", {"lineHeight": "20px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-surface">
+<!-- Side Navigation Shell -->
+<aside class="bg-primary dark:bg-surface-dark h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-gutter px-4 z-50">
+<div class="mb-10 px-2">
+<h1 class="font-headline-md text-headline-md font-bold text-on-primary">JSC Admin</h1>
+<p class="text-on-primary/60 font-body-md">Sport City Management</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim font-bold border-l-4 border-secondary-fixed-dim bg-on-primary-fixed-variant/10 cursor-pointer active:scale-95 duration-150 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span>Monitoring</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary/70 font-medium hover:text-on-primary hover:bg-on-primary-fixed-variant/5 transition-colors cursor-pointer active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span>Revenue</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary/70 font-medium hover:text-on-primary hover:bg-on-primary-fixed-variant/5 transition-colors cursor-pointer active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span>Schedule</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-on-primary/10 pt-4 space-y-2">
+<button class="w-full bg-secondary text-on-primary py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-secondary-fixed-dim hover:text-on-secondary-fixed transition-colors mb-4">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+<span>New Booking</span>
+</button>
+<a class="flex items-center gap-3 px-4 py-2 text-on-primary/70 font-medium hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-primary/70 font-medium hover:text-on-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center h-16 px-gutter bg-surface-container-lowest dark:bg-surface-dark border-b border-surface-container-high dark:border-outline-variant sticky top-0 z-40">
+<div class="flex items-center gap-6 w-1/2">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full focus:ring-2 focus:ring-primary text-body-md" placeholder="Search venues, bookings, or users..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-bold text-primary text-sm leading-tight">Admin User</p>
+<p class="text-xs text-on-surface-variant">Super Admin</p>
+</div>
+<img alt="Admin Avatar" class="w-10 h-10 rounded-full border border-outline-variant" data-alt="A professional headshot of a modern corporate administrator in a bright office setting. The lighting is high-key and clean, reflecting a professional and authoritative mood. The subject has a confident expression, and the background is a softly blurred architectural space with hints of glass and steel, aligning with a high-contrast athletic corporate aesthetic." src="https://lh3.googleusercontent.com/aida/ADBb0ugeQap6WBUkrjB6aT8PEqfXnw82Q755U28mWdIhqY4KnzUQBhI_OPGOHwqxeLRCuU5Dgc0GEYSMwSPVexlYszRV6zkzV8HomabL-gQi5yl4pvkMqyecGU8IdVR8yFQ4Bo8gQ2D2B_HJAGuOxH3t-9G2EWQnRIC3h4Wht9z1URcekZNgyFIWa01_Z4UxJIhHUULGVG6nyDj1qbdTE5yUdG_u1FJ05xHOxoP-OwUV6wcofb8s4JFedCuCKw"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="p-8 space-y-8">
+<!-- Summary Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card: Pendapatan -->
+<div class="bg-primary p-6 rounded-xl shadow-sm text-on-primary relative overflow-hidden group">
+<div class="relative z-10 flex flex-col justify-between h-full">
+<div>
+<p class="font-label-caps text-on-primary/60 uppercase tracking-widest">Pendapatan Hari Ini</p>
+<h2 class="font-headline-lg text-headline-lg mt-2">Rp 12.450.000</h2>
+</div>
+<div class="mt-4 flex items-center gap-2 text-secondary-fixed-dim">
+<span class="material-symbols-outlined text-[18px]" data-icon="trending_up">trending_up</span>
+<span class="font-status-badge text-status-badge">+14% vs kemarin</span>
+</div>
+</div>
+<!-- Mini Sparkline placeholder -->
+<div class="absolute right-0 bottom-0 w-32 h-20 opacity-20 pointer-events-none">
+<svg class="w-full h-full" viewbox="0 0 100 40">
+<path d="M0 35 L20 30 L40 38 L60 20 L80 25 L100 5" fill="none" stroke="white" stroke-width="4"></path>
+</svg>
+</div>
+</div>
+<!-- Card: Pemesanan Aktif -->
+<div class="bg-athletic-white p-6 rounded-xl shadow-sm border border-surface-container-high group hover:border-primary transition-all">
+<div class="flex flex-col justify-between h-full">
+<div>
+<p class="font-label-caps text-on-surface-variant uppercase tracking-widest">Pemesanan Aktif</p>
+<h2 class="font-headline-lg text-headline-lg mt-2 text-primary">42 Slot</h2>
+</div>
+<div class="mt-4 flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-[18px]" data-icon="groups">groups</span>
+<span class="font-status-badge text-status-badge">8 Menunggu Check-in</span>
+</div>
+</div>
+</div>
+<!-- Card: Utilitas -->
+<div class="bg-athletic-white p-6 rounded-xl shadow-sm border border-surface-container-high group hover:border-secondary transition-all">
+<div class="flex flex-col justify-between h-full">
+<div>
+<p class="font-label-caps text-on-surface-variant uppercase tracking-widest">Utilitas Fasilitas</p>
+<div class="flex items-end gap-3 mt-2">
+<h2 class="font-headline-lg text-headline-lg text-primary">87%</h2>
+<div class="w-full bg-surface-container h-3 mb-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 87%"></div>
+</div>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[18px]" data-icon="speed">speed</span>
+<span class="font-status-badge text-status-badge">Kapasitas Puncak Tercapai</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Operational View (Bento-style) -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Left: Venue Real-time Status -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<div class="bg-athletic-white p-6 rounded-xl border border-surface-container-high">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-primary">Status Lapangan Utama</h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container rounded-full text-xs font-bold text-on-surface-variant">Live Update</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Slot 1: Active -->
+<div class="p-4 border-2 border-secondary rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary/10 text-secondary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="sports_tennis">sports_tennis</span>
+</div>
+<div>
+<p class="font-bold text-primary">Lapangan Tennis A</p>
+<p class="text-sm text-secondary font-semibold">Aktif: Pro-Player Club</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs text-on-surface-variant">Selesai dalam</p>
+<p class="font-label-caps text-primary">14:20</p>
+</div>
+</div>
+<!-- Slot 2: Available -->
+<div class="p-4 border border-surface-container-high bg-athletic-white rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container text-on-surface-variant rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="sports_basketball">sports_basketball</span>
+</div>
+<div>
+<p class="font-bold text-primary">Lapangan Basket 1</p>
+<p class="text-sm text-secondary font-semibold">Tersedia</p>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-4 py-1 rounded text-xs font-bold">BOOK NOW</button>
+</div>
+<!-- Slot 3: Booked -->
+<div class="p-4 border border-surface-container-high bg-surface-container-low rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container text-booked-red rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="stadium">stadium</span>
+</div>
+<div>
+<p class="font-bold text-on-surface-variant line-through">Stadion Atletik</p>
+<p class="text-sm text-booked-red font-semibold">Dibooking: Dispora Sumsel</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs text-on-surface-variant">Durasi</p>
+<p class="font-label-caps text-primary">08:00 - 12:00</p>
+</div>
+</div>
+<!-- Slot 4: Locked/Processing -->
+<div class="p-4 border border-locked-yellow bg-locked-yellow/5 hash-pattern rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-locked-yellow text-on-tertiary-fixed rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="lock_clock">lock_clock</span>
+</div>
+<div>
+<p class="font-bold text-primary">Gedung Senam</p>
+<p class="text-sm text-on-tertiary-fixed-variant font-semibold">Proses Pembayaran</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-xs text-on-surface-variant">Timeout</p>
+<p class="font-label-caps text-error">02:45</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Usage Trends Chart Area -->
+<div class="bg-athletic-white p-6 rounded-xl border border-surface-container-high h-[300px] flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-primary">Trend Penggunaan Mingguan</h3>
+<select class="text-xs font-bold border-none bg-surface-container-low rounded focus:ring-primary">
+<option>7 Hari Terakhir</option>
+<option>30 Hari Terakhir</option>
+</select>
+</div>
+<div class="flex-1 flex items-end gap-4 px-4 pb-4">
+<!-- Visual Chart Mock -->
+<div class="flex-1 bg-surface-container-low rounded-t-sm h-[40%] hover:bg-secondary transition-colors relative group">
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity">Mon</span>
+</div>
+<div class="flex-1 bg-surface-container-low rounded-t-sm h-[60%] hover:bg-secondary transition-colors"></div>
+<div class="flex-1 bg-surface-container-low rounded-t-sm h-[85%] hover:bg-secondary transition-colors"></div>
+<div class="flex-1 bg-primary rounded-t-sm h-[95%] hover:bg-secondary transition-colors"></div>
+<div class="flex-1 bg-surface-container-low rounded-t-sm h-[70%] hover:bg-secondary transition-colors"></div>
+<div class="flex-1 bg-surface-container-low rounded-t-sm h-[55%] hover:bg-secondary transition-colors"></div>
+<div class="flex-1 bg-surface-container-low rounded-t-sm h-[45%] hover:bg-secondary transition-colors"></div>
+</div>
+</div>
+</div>
+<!-- Right: Recent Alerts & Logs -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="bg-athletic-white p-6 rounded-xl border border-surface-container-high h-full">
+<h3 class="font-headline-md text-headline-md text-primary mb-6">Peringatan Sistem</h3>
+<div class="space-y-4">
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="shrink-0 w-2 h-2 mt-2 bg-error rounded-full"></div>
+<div>
+<p class="text-sm font-bold text-primary">Maintenance Diperlukan</p>
+<p class="text-xs text-on-surface-variant">Pompa Kolam Aquatik mengalami degradasi tekanan. Perlu pengecekan segera.</p>
+<p class="text-[10px] mt-1 font-label-caps text-on-surface-variant">SEKARANG</p>
+</div>
+</div>
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="shrink-0 w-2 h-2 mt-2 bg-locked-yellow rounded-full"></div>
+<div>
+<p class="text-sm font-bold text-primary">Jadwal Tumpang Tindih</p>
+<p class="text-xs text-on-surface-variant">Event 'Popda Sumsel' terdeteksi bertabrakan dengan booking reguler di GOR Dempo.</p>
+<p class="text-[10px] mt-1 font-label-caps text-on-surface-variant">10 MENIT LALU</p>
+</div>
+</div>
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="shrink-0 w-2 h-2 mt-2 bg-secondary rounded-full"></div>
+<div>
+<p class="text-sm font-bold text-primary">Booking Massal Selesai</p>
+<p class="text-xs text-on-surface-variant">Verifikasi pembayaran untuk 12 slot futsal oleh komunitas 'Begal Bola' sukses.</p>
+<p class="text-[10px] mt-1 font-label-caps text-on-surface-variant">45 MENIT LALU</p>
+</div>
+</div>
+</div>
+<div class="mt-8">
+<h4 class="font-label-caps text-on-surface-variant mb-4">LOG AKTIVITAS TERAKHIR</h4>
+<ul class="space-y-4 text-xs">
+<li class="flex justify-between items-center py-2 border-b border-surface-container">
+<span class="font-medium">#109282 - Tennis Court A</span>
+<span class="text-secondary font-bold">Checked-in</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-surface-container">
+<span class="font-medium">#109285 - Basketball Hall</span>
+<span class="text-on-surface-variant font-bold">Rescheduled</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-surface-container">
+<span class="font-medium">#109281 - Aquatic Stadium</span>
+<span class="text-booked-red font-bold">Cancelled</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-surface-container">
+<span class="font-medium">#109280 - Soccer Field</span>
+<span class="text-secondary font-bold">Checked-in</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple micro-interaction for hover states on charts
+        document.querySelectorAll('.group').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                // Potential for adding dynamic GSAP animations if library was allowed
+            });
+        });
+
+        // Search bar focus effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary');
+        });
+    </script>
+</body></html>

@@ -283,6 +283,14 @@ const AuthController = {
         role: 'Admin'
       });
 
+      const staff = await UserModel.create({
+        nama: 'JSC Staf Kasir',
+        nickname: 'kasirjsc',
+        email: 'kasir@jsc.com',
+        password: 'kasirpassword',
+        role: 'Staff'
+      });
+
       // 2. Create Demo Lapangan
       const futsal = await LapanganModel.create({
         namaLapangan: 'JSC Futsal Arena A',
@@ -310,7 +318,8 @@ const AuthController = {
         jumlahBayar: 300000,
         metodePembayaran: 'E-Wallet',
         statusBayar: 'Verified',
-        tanggalPembayaran: new Date()
+        tanggalPembayaran: new Date(),
+        kodeBooking: 'JSC-DUMMY1'
       });
 
       const booking1 = await PemesananModel.create({
@@ -321,13 +330,15 @@ const AuthController = {
         waktuSelesai: '10:00',
         totalHarga: 300000,
         status: 'Lunas',
-        pembayaranId: pembayaran1.id
+        pembayaranId: pembayaran1.id,
+        checkedIn: false
       });
 
       const pembayaran2 = await PembayaranModel.create({
         jumlahBayar: 200000,
         metodePembayaran: 'Transfer Bank',
-        statusBayar: 'Pending'
+        statusBayar: 'Pending',
+        kodeBooking: 'JSC-DUMMY2'
       });
 
       const booking2 = await PemesananModel.create({
@@ -338,7 +349,8 @@ const AuthController = {
         waktuSelesai: '16:00',
         totalHarga: 200000,
         status: 'Pending',
-        pembayaranId: pembayaran2.id
+        pembayaranId: pembayaran2.id,
+        checkedIn: false
       });
 
       return res.status(200).json({

@@ -6,6 +6,11 @@ import AdminDashboard from './pages/AdminDashboard';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
+import AdminSchedule from './pages/AdminSchedule';
+import StaffScan from './pages/StaffScan';
+import AdminFields from './pages/AdminFields';
+import AdminStaff from './pages/AdminStaff';
+import MyBookings from './pages/MyBookings';
 import { apiService } from './services/api';
 
 export default function App() {
@@ -99,10 +104,16 @@ export default function App() {
           <Route 
             path="/" 
             element={
-              <BookingPage 
-                currentUser={currentUser} 
-                refreshUserPoints={refreshUserPoints} 
-              />
+              currentUser.role === 'Admin' ? (
+                <Navigate to="/admin" replace />
+              ) : currentUser.role === 'Staff' ? (
+                <Navigate to="/admin/schedule" replace />
+              ) : (
+                <BookingPage 
+                  currentUser={currentUser} 
+                  refreshUserPoints={refreshUserPoints} 
+                />
+              )
             } 
           />
           <Route 
@@ -114,17 +125,66 @@ export default function App() {
               />
             } 
           />
-          {currentUser.role === 'Admin' ? (
-            <Route 
-              path="/admin" 
-              element={<AdminDashboard currentUser={currentUser} />} 
-            />
-          ) : (
-            <Route 
-              path="/admin" 
-              element={<Navigate to="/" replace />} 
-            />
+          <Route 
+            path="/bookings" 
+            element={
+              currentUser.role === 'Penyewa' ? (
+                <MyBookings currentUser={currentUser} />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            } 
+          />
+
+          {/* Admin & Staff Shared Routes */}
+          {(currentUser.role === 'Admin' || currentUser.role === 'Staff') && (
+            <>
+              <Route 
+                path="/admin/schedule" 
+                element={<AdminSchedule currentUser={currentUser} />} 
+              />
+              <Route 
+                path="/staff/scan" 
+                element={<StaffScan />} 
+              />
+            </>
           )}
+
+          {/* Admin-only Routes */}
+          {currentUser.role === 'Admin' && (
+            <>
+              <Route 
+                path="/admin" 
+                element={<AdminDashboard currentUser={currentUser} />} 
+              />
+              <Route 
+                path="/admin/fields" 
+                element={<AdminFields />} 
+              />
+              <Route 
+                path="/admin/staff" 
+                element={<AdminStaff />} 
+              />
+            </>
+          )}
+
+          {/* Role-based Redirection for Unauthorized Routes */}
+          <Route 
+            path="/admin/*" 
+            element={
+              currentUser.role === 'Staff' 
+                ? <Navigate to="/admin/schedule" replace /> 
+                : <Navigate to="/" replace />
+            } 
+          />
+          <Route 
+            path="/staff/*" 
+            element={
+              currentUser.role === 'Staff' 
+                ? <Navigate to="/admin/schedule" replace /> 
+                : <Navigate to="/" replace />
+            } 
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

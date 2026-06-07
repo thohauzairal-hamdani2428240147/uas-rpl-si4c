@@ -40,7 +40,7 @@ const Pemesanan = sequelize.define('Pemesanan', {
     allowNull: false
   },
   status: {
-    type: DataTypes.ENUM('Pending', 'Booked', 'Lunas', 'Cancelled', 'Locked'),
+    type: DataTypes.ENUM('Pending', 'Booked', 'Lunas', 'Cancelled', 'Locked', 'Maintenance'),
     allowNull: false,
     defaultValue: 'Pending'
   },
@@ -51,6 +51,11 @@ const Pemesanan = sequelize.define('Pemesanan', {
       model: 'pembayaran',
       key: 'id'
     }
+  },
+  checkedIn: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
   }
 }, {
   tableName: 'pemesanan',

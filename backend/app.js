@@ -7,6 +7,7 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/authRoutes');
+const staffRoutes = require('./routes/staffRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/staff', staffRoutes);
 
 // Health check endpoint (trigger nodemon restart)
 app.get('/health', (req, res) => {
@@ -37,6 +39,35 @@ async function startServer() {
     // Sync database models (creates tables if they don't exist, reset is handled via seeder endpoint)
     await sequelize.sync();
     console.log('All models were synchronized successfully.');
+
+    // Run dynamic migrations to update MySQL database schema
+    try {
+      await sequelize.query("ALTER TABLE pemesanan MODIFY COLUMN status ENUM('Pending', 'Booked', 'Lunas', 'Cancelled', 'Locked', 'Maintenance') NOT NULL DEFAULT 'Pending'");
+      console.log('Database enum status updated successfully to include Maintenance.');
+    } catch (err) {
+      console.warn('Note: Could not alter status enum:', err.message);
+    }
+
+    try {
+      await sequelize.query("ALTER TABLE users MODIFY COLUMN role ENUM('Penyewa', 'Admin', 'Staff') NOT NULL DEFAULT 'Penyewa'");
+      console.log('Database role enum updated successfully to include Staff.');
+    } catch (err) {
+      console.warn('Note: Could not alter role enum:', err.message);
+    }
+
+    try {
+      await sequelize.query("ALTER TABLE pembayaran ADD COLUMN kodeBooking VARCHAR(255) UNIQUE");
+      console.log('Database pembayaran column kodeBooking added.');
+    } catch (err) {
+      console.log('Note: Column kodeBooking already exists or cannot be added:', err.message);
+    }
+
+    try {
+      await sequelize.query("ALTER TABLE pemesanan ADD COLUMN checkedIn BOOLEAN NOT NULL DEFAULT false");
+      console.log('Database pemesanan column checkedIn added.');
+    } catch (err) {
+      console.log('Note: Column checkedIn already exists or cannot be added:', err.message);
+    }
 
     app.listen(PORT, () => {
       console.log(`Server is listening on port ${PORT}`);

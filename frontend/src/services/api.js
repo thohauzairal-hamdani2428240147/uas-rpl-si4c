@@ -87,6 +87,12 @@ export const apiService = {
     return response.data;
   },
 
+  // Get logged in user's bookings history
+  async getMyBookings() {
+    const response = await apiClient.get('/bookings/my-bookings');
+    return response.data;
+  },
+
   // Process / Initiate Payment record
   async processPayment(paymentData) {
     const response = await apiClient.post('/payments/process', paymentData);
@@ -103,5 +109,63 @@ export const apiService = {
   async getAdminReport() {
     const response = await apiClient.get('/admin/laporan');
     return response.data;
+  },
+
+  // Get Admin Schedule Grid for a date
+  async getAdminScheduleGrid(tanggal) {
+    const response = await apiClient.get('/admin/grid', {
+      params: { tanggal }
+    });
+    return response.data;
+  },
+
+  // Update a schedule slot status
+  async updateAdminScheduleSlot(data) {
+    const response = await apiClient.post('/admin/grid/status', data);
+    return response.data;
+  },
+
+  // Staff & Admin QR verification endpoints
+  async getBookingDetailsForStaff(kodeBooking) {
+    const response = await apiClient.get(`/staff/booking/${kodeBooking}`);
+    return response.data;
+  },
+
+  async processStaffCheckIn(kodeBooking) {
+    const response = await apiClient.post('/staff/booking/checkin', { kodeBooking });
+    return response.data;
+  },
+
+  // Admin CRUD for fields
+  async createField(fieldData) {
+    const response = await apiClient.post('/admin/fields', fieldData);
+    return response.data;
+  },
+
+  async updateField(id, fieldData) {
+    const response = await apiClient.put(`/admin/fields/${id}`, fieldData);
+    return response.data;
+  },
+
+  async deleteField(id) {
+    const response = await apiClient.delete(`/admin/fields/${id}`);
+    return response.data;
+  },
+
+  // Admin CRUD for staff accounts
+  async getStaffList() {
+    const response = await apiClient.get('/admin/staff');
+    return response.data;
+  },
+
+  async createStaffAccount(staffData) {
+    const response = await apiClient.post('/admin/staff', staffData);
+    return response.data;
+  },
+
+  async deleteStaffAccount(id) {
+    const response = await apiClient.delete(`/admin/staff/${id}`);
+    return response.data;
   }
 };
+

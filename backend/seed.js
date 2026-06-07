@@ -37,10 +37,19 @@ async function seed() {
       role: 'Admin'
     });
 
+    const staff = await User.create({
+      nama: 'JSC Staf Kasir',
+      nickname: 'kasirjsc',
+      email: 'kasir@jsc.com',
+      password: 'kasirpassword',
+      role: 'Staff'
+    });
+
     console.log('Demo Users created:');
     console.log(`- Penyewa 1: Nickname = "${penyewa1.nickname}", Password = "password123" (${penyewa1.email})`);
     console.log(`- Penyewa 2: Nickname = "${penyewa2.nickname}", Password = "password123" (${penyewa2.email})`);
     console.log(`- Admin: Nickname = "${admin.nickname}", Password = "adminpassword" (${admin.email})`);
+    console.log(`- Staff: Nickname = "${staff.nickname}", Password = "kasirpassword" (${staff.email})`);
 
     // 2. Create Demo Lapangan
     const futsal = await Lapangan.create({
@@ -75,7 +84,8 @@ async function seed() {
       jumlahBayar: 300000,
       metodePembayaran: 'E-Wallet',
       statusBayar: 'Verified',
-      tanggalPembayaran: new Date()
+      tanggalPembayaran: new Date(),
+      kodeBooking: 'JSC-DUMMY1'
     });
 
     const booking1 = await Pemesanan.create({
@@ -86,14 +96,16 @@ async function seed() {
       waktuSelesai: '10:00',
       totalHarga: 300000, // 2 hours
       status: 'Lunas',
-      pembayaranId: pembayaran1.id
+      pembayaranId: pembayaran1.id,
+      checkedIn: false
     });
 
     // Booking 2: Basket (Pending)
     const pembayaran2 = await Pembayaran.create({
       jumlahBayar: 200000,
       metodePembayaran: 'Transfer Bank',
-      statusBayar: 'Pending'
+      statusBayar: 'Pending',
+      kodeBooking: 'JSC-DUMMY2'
     });
 
     const booking2 = await Pemesanan.create({
@@ -104,7 +116,8 @@ async function seed() {
       waktuSelesai: '16:00',
       totalHarga: 200000, // 1 hour
       status: 'Pending',
-      pembayaranId: pembayaran2.id
+      pembayaranId: pembayaran2.id,
+      checkedIn: false
     });
 
     console.log('\nDummy bookings and payments seeded for verification testing.');

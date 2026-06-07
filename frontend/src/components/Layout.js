@@ -43,16 +43,92 @@ export default function Layout({ children, currentUser, onLogout }) {
 
         {/* Sidebar Navigation Menu */}
         <div className="d-flex flex-column gap-1 flex-grow-1">
-          <Link 
-            className={`sidebar-link ${location.pathname === '/' ? 'active' : ''}`}
-            to="/"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <span className="material-symbols-outlined">calendar_month</span>
-            <span>Jadwal Booking</span>
-          </Link>
+          {/* Menu for Penyewa */}
+          {currentUser && currentUser.role === 'Penyewa' && (
+            <>
+              <Link 
+                className={`sidebar-link ${location.pathname === '/' ? 'active' : ''}`}
+                to="/"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="material-symbols-outlined">calendar_month</span>
+                <span>Jadwal Booking</span>
+              </Link>
+              <Link 
+                className={`sidebar-link ${location.pathname === '/bookings' ? 'active' : ''}`}
+                to="/bookings"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="material-symbols-outlined">history</span>
+                <span>Riwayat Booking</span>
+              </Link>
+            </>
+          )}
 
-          {/* Profile Saya Page Link */}
+          {/* Menu for Staff */}
+          {currentUser && currentUser.role === 'Staff' && (
+            <>
+              <Link 
+                className={`sidebar-link ${location.pathname === '/admin/schedule' ? 'active' : ''}`}
+                to="/admin/schedule"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="material-symbols-outlined">calendar_month</span>
+                <span>Jadwal Staf</span>
+              </Link>
+              <Link 
+                className={`sidebar-link ${location.pathname === '/staff/scan' ? 'active' : ''}`}
+                to="/staff/scan"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="material-symbols-outlined">qr_code_scanner</span>
+                <span>Scan E-Ticket</span>
+              </Link>
+            </>
+          )}
+
+          {/* Menu for Admin */}
+          {currentUser && currentUser.role === 'Admin' && (
+            <>
+              <Link 
+                className={`sidebar-link ${location.pathname === '/admin' ? 'active' : ''}`}
+                to="/admin"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="material-symbols-outlined">monitoring</span>
+                <span>Dasbor Admin</span>
+              </Link>
+              
+              <Link 
+                className={`sidebar-link ${location.pathname === '/admin/schedule' ? 'active' : ''}`}
+                to="/admin/schedule"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="material-symbols-outlined">calendar_month</span>
+                <span>Jadwal Admin</span>
+              </Link>
+
+              <Link 
+                className={`sidebar-link ${location.pathname === '/admin/fields' ? 'active' : ''}`}
+                to="/admin/fields"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="material-symbols-outlined">sports_soccer</span>
+                <span>Kelola Lapangan</span>
+              </Link>
+
+              <Link 
+                className={`sidebar-link ${location.pathname === '/admin/staff' ? 'active' : ''}`}
+                to="/admin/staff"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="material-symbols-outlined">badge</span>
+                <span>Kelola Staf</span>
+              </Link>
+            </>
+          )}
+
+          {/* Profile Saya Page Link (Semua Role) */}
           <Link 
             className={`sidebar-link ${location.pathname === '/profile' ? 'active' : ''}`}
             to="/profile"
@@ -61,18 +137,6 @@ export default function Layout({ children, currentUser, onLogout }) {
             <span className="material-symbols-outlined">person</span>
             <span>Profil Saya</span>
           </Link>
-
-          {/* Admin Dashboard - Admin role access only */}
-          {currentUser && currentUser.role === 'Admin' && (
-            <Link 
-              className={`sidebar-link ${location.pathname === '/admin' ? 'active' : ''}`}
-              to="/admin"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <span className="material-symbols-outlined">monitoring</span>
-              <span>Dasbor Admin</span>
-            </Link>
-          )}
 
           <hr className="my-2 border-secondary border-opacity-25" />
 

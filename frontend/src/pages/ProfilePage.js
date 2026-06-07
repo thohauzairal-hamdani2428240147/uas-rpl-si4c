@@ -290,6 +290,7 @@ export default function ProfilePage({ currentUser, onProfileUpdated }) {
           </div>
         </div>
       </div>
+
     </div>
   );
 }

@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { sequelize, Pemesanan, Lapangan, User } = require('../models');
+const { sequelize, Pemesanan, Lapangan, User, Pembayaran } = require('../models');
 
 // Helper to calculate duration in hours between two time strings (HH:MM or HH:MM:SS)
 function calculateDurationInHours(startTimeStr, endTimeStr) {
@@ -38,7 +38,7 @@ const BookingController = {
           lapanganId,
           tanggal,
           status: {
-            [Op.in]: ['Pending', 'Booked', 'Locked', 'Lunas']
+            [Op.in]: ['Pending', 'Booked', 'Locked', 'Lunas', 'Maintenance']
           },
           [Op.and]: [
             { waktuMulai: { [Op.lt]: waktuSelesai } },
@@ -148,7 +148,7 @@ const BookingController = {
             lapanganId,
             tanggal,
             status: {
-              [Op.in]: ['Pending', 'Booked', 'Locked', 'Lunas']
+              [Op.in]: ['Pending', 'Booked', 'Locked', 'Lunas', 'Maintenance']
             },
             [Op.and]: [
               { waktuMulai: { [Op.lt]: waktuSelesai } },
@@ -235,7 +235,7 @@ const BookingController = {
           lapanganId,
           tanggal,
           status: {
-            [Op.in]: ['Pending', 'Booked', 'Locked', 'Lunas']
+            [Op.in]: ['Pending', 'Booked', 'Locked', 'Lunas', 'Maintenance']
           }
         },
         attributes: ['id', 'waktuMulai', 'waktuSelesai', 'status']
@@ -250,6 +250,44 @@ const BookingController = {
       return res.status(500).json({
         status: 'error',
         message: 'Gagal mengambil jadwal booking.',
+        error: error.message
+      });
+    }
+  },
+
+  /**
+   * 4. Ambil Riwayat Booking Pengguna yang Login (Penyewa Only)
+   * GET /api/bookings/my-bookings
+   */
+  async getMyBookings(req, res) {
+    try {
+      const userId = req.user.id;
+      const bookings = await Pemesanan.findAll({
+        where: { userId },
+        include: [
+          {
+            model: Lapangan,
+            as: 'lapangan',
+            attributes: ['id', 'namaLapangan', 'kategori', 'hargaPerJam']
+          },
+          {
+            model: Pembayaran,
+            as: 'pembayaran',
+            attributes: ['id', 'jumlahBayar', 'metodePembayaran', 'statusBayar', 'tanggalPembayaran', 'kodeBooking']
+          }
+        ],
+        order: [['createdAt', 'DESC']]
+      });
+
+      return res.status(200).json({
+        status: 'success',
+        data: bookings
+      });
+    } catch (error) {
+      console.error('Error in getMyBookings:', error);
+      return res.status(500).json({
+        status: 'error',
+        message: 'Gagal mengambil riwayat pemesanan.',
         error: error.message
       });
     }

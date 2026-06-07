@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
 
 export default function BookingPage({ currentUser, refreshUserPoints }) {
+  const navigate = useNavigate();
   const [fields, setFields] = useState([]);
   const [selectedField, setSelectedField] = useState(null);
   const [date, setDate] = useState('2026-06-10');
@@ -82,6 +84,9 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
       if (['Locked', 'Pending'].includes(overlapping.status)) {
         return 'locked';
       }
+      if (overlapping.status === 'Maintenance') {
+        return 'maintenance';
+      }
     }
 
     // Check if slot is selected by user
@@ -101,7 +106,7 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
   // Handle slot click (Allow Non-Contiguous Selections)
   const handleSelectSlot = (slot) => {
     const status = getSlotStatus(slot);
-    if (status === 'booked' || status === 'locked') {
+    if (status === 'booked' || status === 'locked' || status === 'maintenance') {
       return; // Ignore clicks on unavailable slots
     }
 
@@ -190,10 +195,7 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
       if (status === 'Verified') {
         alert('Pembayaran Berhasil! Lapangan terkunci permanen. Anda mendapatkan poin loyalitas sebesar 10% dari total transaksi.');
         refreshUserPoints();
-        
-        // Reload booked slots to display the newly booked slot as Red (Booked)
-        const res = await apiService.getBookedSlots(selectedField.id, date);
-        setBookedSlots(res.data);
+        navigate('/bookings');
       } else {
         alert('Pembayaran gagal disimulasikan. Jadwal dibatalkan kembali.');
       }
@@ -309,6 +311,10 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
               <div className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: '#006e0a' }}></div>
               <span className="text-xs text-muted">Selected</span>
             </div>
+            <div className="d-flex align-items-center gap-1">
+              <div className="rounded-circle bg-secondary bg-opacity-50" style={{ width: '12px', height: '12px' }}></div>
+              <span className="text-xs text-muted">Maintenance</span>
+            </div>
           </div>
 
           {/* Step 3: Slots Grid */}
@@ -335,6 +341,10 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
                   cardClass = "border-jsc-green bg-light bg-opacity-70";
                   icon = "check_circle";
                   textClass = "text-success";
+                } else if (slotStatus === 'maintenance') {
+                  cardClass = "bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 opacity-75";
+                  icon = "settings";
+                  textClass = "text-secondary";
                 }
 
                 return (
@@ -391,6 +401,10 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
                   cardClass = "border-jsc-green bg-light bg-opacity-70";
                   icon = "check_circle";
                   textClass = "text-success";
+                } else if (slotStatus === 'maintenance') {
+                  cardClass = "bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 opacity-75";
+                  icon = "settings";
+                  textClass = "text-secondary";
                 }
 
                 return (
