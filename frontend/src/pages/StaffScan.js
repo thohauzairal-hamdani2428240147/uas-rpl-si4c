@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { apiService } from '../services/api';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 
 export default function StaffScan() {
   const [searchCode, setSearchCode] = useState('');
@@ -46,29 +46,34 @@ export default function StaffScan() {
     
     setTimeout(() => {
       try {
-        const scanner = new Html5QrcodeScanner('reader', {
-          fps: 10,
-          qrbox: { width: 250, height: 250 }
-        }, false);
+        const html5QrCode = new Html5Qrcode('reader');
+        scannerRef.current = html5QrCode;
 
-        scannerRef.current = scanner;
-
-        scanner.render(
+        html5QrCode.start(
+          { facingMode: 'environment' }, // Prefer rear-facing (back) camera
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 }
+          },
           (decodedText) => {
             setSearchCode(decodedText);
-            scanner.clear().then(() => {
+            html5QrCode.stop().then(() => {
               scannerRef.current = null;
               setIsScanning(false);
               handleSearch(decodedText);
-            }).catch(e => console.error("Error clearing scanner:", e));
+            }).catch(e => console.error("Error stopping scanner on success:", e));
           },
-          (error) => {
-            // Scanner scanning errors are ignored to avoid console spam
+          (errorMessage) => {
+            // Constant scanning feedback - ignored to avoid console spam
           }
-        );
+        ).catch(err => {
+          console.error("Gagal memulai camera stream:", err);
+          setMessage({ type: 'danger', text: 'Gagal membuka kamera. Pastikan izin kamera telah diberikan.' });
+          setIsScanning(false);
+        });
       } catch (err) {
         console.error("Gagal menginisiasi scanner:", err);
-        setMessage({ type: 'danger', text: 'Gagal mengaktifkan kamera. Pastikan izin kamera telah diberikan.' });
+        setMessage({ type: 'danger', text: 'Gagal mengaktifkan kamera.' });
         setIsScanning(false);
       }
     }, 150);
@@ -77,7 +82,7 @@ export default function StaffScan() {
   // Stop QR Scanner
   const stopScanner = () => {
     if (scannerRef.current) {
-      scannerRef.current.clear().then(() => {
+      scannerRef.current.stop().then(() => {
         scannerRef.current = null;
         setIsScanning(false);
         setMessage({ type: '', text: '' });
@@ -94,7 +99,7 @@ export default function StaffScan() {
   useEffect(() => {
     return () => {
       if (scannerRef.current) {
-        scannerRef.current.clear().catch(err => console.error("Cleanup error:", err));
+        scannerRef.current.stop().catch(err => console.error("Cleanup error:", err));
       }
     };
   }, []);
