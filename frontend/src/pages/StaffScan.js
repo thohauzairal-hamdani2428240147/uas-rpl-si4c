@@ -129,12 +129,9 @@ export default function StaffScan() {
     <div className="container py-4">
       {/* Hero Header */}
       <div 
-        className="position-relative overflow-hidden text-white rounded-4 mb-4 p-5 d-flex flex-column justify-content-end shadow-sm"
+        className="jsc-hero-header position-relative overflow-hidden text-white rounded-4 mb-4 p-5 d-flex flex-column justify-content-end shadow-sm"
         style={{
-          height: '180px',
-          backgroundImage: 'linear-gradient(to top, rgba(0, 6, 19, 0.95), rgba(0, 6, 19, 0.2)), url("https://lh3.googleusercontent.com/aida/AP1WRLsxjKtjytd7fYWMKkifIoVGt1CythKp5sbmRmIu223cCOrl8MVD1_x8YnzUCSnZoZpU84kkb6FH733i-OGdQtiZmGxz9ThmDK7ZQiyNbqtf8JU1X1jIRGMMMyaghsWOyiO-4g_FCmlKj0TkYgXMCLME3Ox07_Lp2sw8zVgIu-uez-eN1n0nx1lIwxxl8Lg_8AylzmvetnlkBgIlzLZkOs06PE87aQyfHo7zvKlV7ThUL8cgpLf5xINs7Q")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          backgroundImage: 'linear-gradient(to top, rgba(0, 6, 19, 0.95), rgba(0, 6, 19, 0.2)), url("https://lh3.googleusercontent.com/aida/AP1WRLsxjKtjytd7fYWMKkifIoVGt1CythKp5sbmRmIu223cCOrl8MVD1_x8YnzUCSnZoZpU84kkb6FH733i-OGdQtiZmGxz9ThmDK7ZQiyNbqtf8JU1X1jIRGMMMyaghsWOyiO-4g_FCmlKj0TkYgXMCLME3Ox07_Lp2sw8zVgIu-uez-eN1n0nx1lIwxxl8Lg_8AylzmvetnlkBgIlzLZkOs06PE87aQyfHo7zvKlV7ThUL8cgpLf5xINs7Q")'
         }}
       >
         <span className="badge bg-jsc-lime text-jsc-navy font-label-caps align-self-start mb-2 px-3 py-2">
@@ -237,13 +234,13 @@ export default function StaffScan() {
                   <div className="position-absolute bg-white rounded-circle" style={{ width: '20px', height: '20px', right: '-10px', top: '50%', transform: 'translateY(-50%)', borderLeft: '1px solid #dee2e6' }}></div>
 
                   {/* Top Header */}
-                  <div className="d-flex justify-content-between align-items-start border-bottom border-dashed pb-3 mb-3">
+                  <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center border-bottom border-dashed pb-3 mb-3 gap-2">
                     <div>
                       <p className="text-[10px] text-muted fw-bold uppercase mb-0">Kode Booking</p>
                       <h4 className="font-bold text-jsc-secondary mb-0">{bookingDetails.kodeBooking}</h4>
                     </div>
-                    <div className="text-end">
-                      <p className="text-[10px] text-muted fw-bold uppercase mb-0">Status Pembayaran</p>
+                    <div className="text-sm-end">
+                      <p className="text-[10px] text-muted fw-bold uppercase mb-0 mb-sm-1">Status Pembayaran</p>
                       <span className="badge bg-success bg-opacity-10 text-success border border-success py-1 px-2.5 rounded-pill text-[10px]">
                         LUNAS (Verified)
                       </span>
@@ -256,14 +253,18 @@ export default function StaffScan() {
                     <div className="p-3 bg-white border rounded-3">
                       <div className="d-flex align-items-center gap-3">
                         <div 
-                          className="bg-jsc-navy text-white rounded-circle d-flex align-items-center justify-content-center font-bold"
+                          className="bg-jsc-navy text-white rounded-circle d-flex align-items-center justify-content-center font-bold flex-shrink-0"
                           style={{ width: '40px', height: '40px' }}
                         >
                           {bookingDetails.pemesanan?.[0]?.user?.nama?.charAt(0) || 'U'}
                         </div>
                         <div>
-                          <h6 className="font-bold mb-0 text-jsc-primary">{bookingDetails.pemesanan?.[0]?.user?.nama}</h6>
-                          <p className="text-xs text-muted mb-0">@{bookingDetails.pemesanan?.[0]?.user?.nickname} &bull; {bookingDetails.pemesanan?.[0]?.user?.email}</p>
+                          <h6 className="font-bold mb-1 text-jsc-primary">{bookingDetails.pemesanan?.[0]?.user?.nama}</h6>
+                          <div className="text-xs text-muted d-flex flex-column flex-sm-row flex-wrap align-items-start align-items-sm-center gap-1">
+                            <span>@{bookingDetails.pemesanan?.[0]?.user?.nickname}</span>
+                            <span className="d-none d-sm-inline">&bull;</span>
+                            <span>{bookingDetails.pemesanan?.[0]?.user?.email}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -274,7 +275,7 @@ export default function StaffScan() {
                     <p className="text-[10px] text-muted fw-bold uppercase mb-1">Daftar Slot Pemesanan</p>
                     <div className="p-3 bg-white border rounded-3 space-y-3">
                       {bookingDetails.pemesanan?.map((slot, index) => (
-                        <div key={slot.id} className={`d-flex justify-content-between align-items-center ${index > 0 ? 'border-top pt-2.5 mt-2.5' : ''}`}>
+                        <div key={slot.id} className={`d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 ${index > 0 ? 'border-top pt-2.5 mt-2.5' : ''}`}>
                           <div>
                             <span className="badge bg-jsc-navy text-white font-label-caps text-[9px] mb-1">
                               {slot.lapangan?.kategori}
@@ -282,8 +283,8 @@ export default function StaffScan() {
                             <h6 className="font-bold text-sm mb-0 text-jsc-primary">{slot.lapangan?.namaLapangan}</h6>
                             <p className="text-xs text-muted mb-0">{slot.tanggal} &bull; {slot.waktuMulai?.substring(0, 5)} - {slot.waktuSelesai?.substring(0, 5)}</p>
                           </div>
-                          <div className="text-end">
-                            <span className={`badge text-xs py-1.5 px-2.5 rounded-pill ${slot.checkedIn ? 'bg-success bg-opacity-10 text-success border border-success' : 'bg-warning bg-opacity-10 text-dark border border-warning'}`}>
+                          <div className="text-sm-end w-100 w-sm-auto mt-1 mt-sm-0">
+                            <span className={`badge text-xs py-1.5 px-2.5 rounded-pill d-inline-block ${slot.checkedIn ? 'bg-success bg-opacity-10 text-success border border-success' : 'bg-warning bg-opacity-10 text-dark border border-warning'}`}>
                               {slot.checkedIn ? 'Sudah Masuk' : 'Belum Check-in'}
                             </span>
                           </div>

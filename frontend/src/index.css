@@ -220,6 +220,17 @@ body {
     backdrop-filter: blur(2px);
     transition: opacity 0.3s ease;
   }
+  .jsc-canvas {
+    padding: 16px 12px;
+  }
+  .font-headline-lg {
+    font-size: 24px;
+    line-height: 30px;
+  }
+  .font-headline-md {
+    font-size: 20px;
+    line-height: 26px;
+  }
 }
 
 /* Sidebar Nav Link styles */
@@ -245,8 +256,53 @@ body {
   font-weight: 700;
   background-color: rgba(255, 255, 255, 0.08);
   border-left: 4px solid var(--jsc-secondary-lime-dim);
-  border-radius-top-left: 0;
-  border-radius-bottom-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Sticky Bottom Bar Animation */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Helper utilities */
+.text-xs {
+  font-size: 0.75rem !important;
+}
+
+.text-\[10px\] {
+  font-size: 10px !important;
+}
+
+.text-\[9px\] {
+  font-size: 9px !important;
+}
+
+/* Premium Page Headers */
+.jsc-hero-header {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all 0.2s ease;
+}
+
+.jsc-hero-header.tall {
+  height: 220px;
+}
+
+@media (max-width: 767px) {
+  .jsc-hero-header, .jsc-hero-header.tall {
+    height: 140px;
+    padding: 24px 16px !important;
+    border-radius: 12px !important;
+    margin-bottom: 16px !important;
+  }
 }
 
 /* Icon Spin animation */
@@ -256,4 +312,14 @@ body {
 }
 .spin-icon {
   animation: spin 1s linear infinite;
+}
+
+/* Sticky Column utility for table-responsive grids */
+.sticky-left {
+  position: sticky !important;
+  left: 0;
+  z-index: 10;
+  background-color: #ffffff !important;
+  border-right: 2px solid var(--jsc-outline-variant) !important;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
 }

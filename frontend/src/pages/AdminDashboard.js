@@ -66,7 +66,7 @@ export default function AdminDashboard({ currentUser }) {
         </div>
         
         {/* Mock Filter Bars */}
-        <div className="d-flex gap-2">
+        <div className="d-flex flex-wrap gap-2">
           <div className="bg-white border rounded px-3 py-2 d-flex align-items-center gap-2">
             <span className="material-symbols-outlined text-muted text-sm">calendar_today</span>
             <select className="border-0 bg-transparent fw-bold text-xs p-0" style={{ outline: 'none', cursor: 'pointer' }}>
@@ -129,7 +129,7 @@ export default function AdminDashboard({ currentUser }) {
                     { day: 'SAT', val: 95 },
                     { day: 'SUN', val: 80 }
                   ].map((bar, index) => (
-                    <div className="d-flex flex-column align-items-center flex-grow-1 mx-2" key={index}>
+                    <div className="d-flex flex-column align-items-center flex-grow-1 mx-1 mx-sm-2" key={index}>
                       <div 
                         className={`w-100 rounded-top transition-all`} 
                         style={{ 
