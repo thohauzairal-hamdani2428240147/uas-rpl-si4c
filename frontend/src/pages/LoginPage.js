@@ -152,16 +152,9 @@ export default function LoginPage({ onLoginSuccess }) {
 
         {/* Footer info/seeder */}
         <div className="card-footer bg-light border-top-0 px-4 py-3 text-center">
-          <p className="text-[10px] text-muted mb-2 font-medium">
-            Akun Demo Bawaan:
-            <br />
-            <strong>Ahmad (Penyewa):</strong> ahmad123 / password123
-            <br />
-            <strong>Admin (JSC Admin):</strong> adminjsc / adminpassword
-          </p>
           <button 
             type="button" 
-            className="btn btn-outline-secondary w-100 py-1.5 text-xs d-flex align-items-center justify-content-center gap-1 mt-1"
+            className="btn btn-outline-secondary w-100 py-1.5 text-xs d-flex align-items-center justify-content-center gap-1"
             onClick={handleSeedDatabase}
             disabled={seedStatus === 'seeding'}
           >

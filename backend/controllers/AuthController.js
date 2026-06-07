@@ -257,37 +257,45 @@ const AuthController = {
       await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
       
       // 1. Create Demo Users
-      const penyewa1 = await UserModel.create({
-        nama: 'Ahmad Penyewa',
-        nickname: 'ahmad123',
-        email: 'ahmad@demo.com',
-        password: 'password123',
+      const user1 = await UserModel.create({
+        nama: 'User 1 JSC',
+        nickname: 'user1',
+        email: 'user1@test.com',
+        password: 'user1123',
         role: 'Penyewa',
         poinLoyalitas: 10
       });
 
-      const penyewa2 = await UserModel.create({
-        nama: 'Budi Penyewa',
-        nickname: 'budi456',
-        email: 'budi@demo.com',
-        password: 'password123',
+      const user2 = await UserModel.create({
+        nama: 'User 2 JSC',
+        nickname: 'user2',
+        email: 'user2@test.com',
+        password: 'user2123',
         role: 'Penyewa',
         poinLoyalitas: 0
       });
 
       const admin = await UserModel.create({
-        nama: 'JSC Admin',
+        nama: 'Admin JSC',
         nickname: 'adminjsc',
-        email: 'admin@jsc.com',
-        password: 'adminpassword',
+        email: 'admin@test.com',
+        password: 'adminjsc123',
         role: 'Admin'
       });
 
-      const staff = await UserModel.create({
-        nama: 'JSC Staf Kasir',
-        nickname: 'kasirjsc',
-        email: 'kasir@jsc.com',
-        password: 'kasirpassword',
+      const staff1 = await UserModel.create({
+        nama: 'Staff 1 JSC',
+        nickname: 'staff1jsc',
+        email: 'staf1@test.com',
+        password: 'staff1jsc123',
+        role: 'Staff'
+      });
+
+      const staff2 = await UserModel.create({
+        nama: 'Staff 2 JSC',
+        nickname: 'staff2jsc',
+        email: 'staf2@test.com',
+        password: 'staff2jsc123',
         role: 'Staff'
       });
 
@@ -323,7 +331,7 @@ const AuthController = {
       });
 
       const booking1 = await PemesananModel.create({
-        userId: penyewa1.id,
+        userId: user1.id,
         lapanganId: futsal.id,
         tanggal: '2026-06-10',
         waktuMulai: '08:00',
@@ -342,7 +350,7 @@ const AuthController = {
       });
 
       const booking2 = await PemesananModel.create({
-        userId: penyewa2.id,
+        userId: user2.id,
         lapanganId: basket.id,
         tanggal: '2026-06-11',
         waktuMulai: '15:00',
