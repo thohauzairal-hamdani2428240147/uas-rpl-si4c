@@ -17,7 +17,7 @@ export default function AdminDashboard({ currentUser }) {
         setLoading(false);
         return;
       }
-      
+
       try {
         setError('');
         const data = await apiService.getAdminReport();
@@ -46,40 +46,40 @@ export default function AdminDashboard({ currentUser }) {
   // Dynamic calculations helpers
   const getTrendData = () => {
     const daily = report.dailyData || [];
-    
+
     // 1. Filter by category
     const filtered = daily.filter(d => {
       if (selectedCategory === 'All Facilities') return true;
       return d.kategori && d.kategori.toLowerCase() === selectedCategory.toLowerCase();
     });
-    
+
     // 2. Helper to get dates
     const now = new Date();
-    
+
     if (selectedRange === 'This Week') {
       // Find current Monday
       const currentDay = now.getDay(); // 0 is Sunday, 1 is Monday...
       const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay;
       const startOfWeek = new Date(now);
       startOfWeek.setDate(now.getDate() + distanceToMonday);
-      startOfWeek.setHours(0,0,0,0);
-      
+      startOfWeek.setHours(0, 0, 0, 0);
+
       const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
       const currentWeekRevenues = days.map((day, idx) => {
         const d = new Date(startOfWeek);
         d.setDate(startOfWeek.getDate() + idx);
         const localD = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
         const dateStr = localD.toISOString().split('T')[0];
-        
+
         const sum = filtered
           .filter(item => item.date === dateStr)
           .reduce((acc, curr) => acc + curr.amount, 0);
-          
+
         return { label: day, val: sum };
       });
-      
+
       const currentTotal = currentWeekRevenues.reduce((acc, curr) => acc + curr.val, 0);
-      
+
       // Previous week total
       const startOfPrevWeek = new Date(startOfWeek);
       startOfPrevWeek.setDate(startOfWeek.getDate() - 7);
@@ -88,20 +88,20 @@ export default function AdminDashboard({ currentUser }) {
         d.setDate(startOfPrevWeek.getDate() + idx);
         const localD = new Date(d.getTime() - (d.getTimezoneOffset() * 60000));
         const dateStr = localD.toISOString().split('T')[0];
-        
+
         return filtered
           .filter(item => item.date === dateStr)
           .reduce((acc, curr) => acc + curr.amount, 0);
       });
       const prevTotal = prevWeekRevenues.reduce((acc, curr) => acc + curr, 0);
-      
+
       let trendPercent = 0;
       if (prevTotal > 0) {
         trendPercent = ((currentTotal - prevTotal) / prevTotal) * 100;
       } else if (currentTotal > 0) {
         trendPercent = 100;
       }
-      
+
       const maxVal = Math.max(...currentWeekRevenues.map(r => r.val), 100000);
       const bars = currentWeekRevenues.map(r => ({
         day: r.label,
@@ -109,7 +109,7 @@ export default function AdminDashboard({ currentUser }) {
         heightPercent: Math.max(10, Math.min(100, (r.val / maxVal) * 100)),
         active: new Date().getDay() === (days.indexOf(r.label) + 1) % 7 // Highlight current day
       }));
-      
+
       return {
         total: currentTotal,
         trendPercent: trendPercent.toFixed(1),
@@ -123,7 +123,7 @@ export default function AdminDashboard({ currentUser }) {
         { label: 'Wk 2', daysMin: 15, daysMax: 21 },
         { label: 'Wk 1', daysMin: 22, daysMax: 30 }
       ];
-      
+
       const currentPeriodRevenues = weeks.map(w => {
         const sum = filtered.filter(item => {
           const [y, m, d] = item.date.split('-').map(Number);
@@ -132,12 +132,12 @@ export default function AdminDashboard({ currentUser }) {
           const diffDays = Math.round((todayLocalDate - itemLocalDate) / (1000 * 60 * 60 * 24));
           return diffDays >= w.daysMin && diffDays <= w.daysMax;
         }).reduce((acc, curr) => acc + curr.amount, 0);
-        
+
         return { label: w.label, val: sum };
       }).reverse(); // Sort Wk 1 -> Wk 4
-      
+
       const currentTotal = currentPeriodRevenues.reduce((acc, curr) => acc + curr.val, 0);
-      
+
       // Previous 30 days total
       const prevTotal = filtered.filter(item => {
         const [y, m, d] = item.date.split('-').map(Number);
@@ -146,14 +146,14 @@ export default function AdminDashboard({ currentUser }) {
         const diffDays = Math.round((todayLocalDate - itemLocalDate) / (1000 * 60 * 60 * 24));
         return diffDays >= 31 && diffDays <= 60;
       }).reduce((acc, curr) => acc + curr.amount, 0);
-      
+
       let trendPercent = 0;
       if (prevTotal > 0) {
         trendPercent = ((currentTotal - prevTotal) / prevTotal) * 100;
       } else if (currentTotal > 0) {
         trendPercent = 100;
       }
-      
+
       const maxVal = Math.max(...currentPeriodRevenues.map(r => r.val), 100000);
       const bars = currentPeriodRevenues.map((r, idx) => ({
         day: r.label,
@@ -161,7 +161,7 @@ export default function AdminDashboard({ currentUser }) {
         heightPercent: Math.max(10, Math.min(100, (r.val / maxVal) * 100)),
         active: idx === 3 // Highlight latest week
       }));
-      
+
       return {
         total: currentTotal,
         trendPercent: trendPercent.toFixed(1),
@@ -212,7 +212,7 @@ export default function AdminDashboard({ currentUser }) {
           text: ''
         },
         labels: {
-          formatter: function() {
+          formatter: function () {
             if (this.value >= 1000000) {
               return 'Rp ' + (this.value / 1000000) + 'M';
             }
@@ -263,6 +263,7 @@ export default function AdminDashboard({ currentUser }) {
         })
       }]
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, selectedRange, selectedCategory, report, currentUser.role]);
 
   // Find top facility by booking count
@@ -301,13 +302,13 @@ export default function AdminDashboard({ currentUser }) {
           </h2>
           <p className="text-muted text-sm mb-0">Financial performance and transaction history for Jakabaring Sport City.</p>
         </div>
-        
+
         {/* Dynamic Filter Bars */}
         <div className="d-flex flex-wrap gap-2">
           <div className="glass-panel rounded px-3 py-2 d-flex align-items-center gap-2 border border-light">
             <span className="material-symbols-outlined text-muted text-sm">calendar_today</span>
-            <select 
-              className="border-0 bg-transparent fw-bold text-xs p-0 text-jsc-primary" 
+            <select
+              className="border-0 bg-transparent fw-bold text-xs p-0 text-jsc-primary"
               style={{ outline: 'none', cursor: 'pointer' }}
               value={selectedRange}
               onChange={(e) => setSelectedRange(e.target.value)}
@@ -318,8 +319,8 @@ export default function AdminDashboard({ currentUser }) {
           </div>
           <div className="glass-panel rounded px-3 py-2 d-flex align-items-center gap-2 border border-light">
             <span className="material-symbols-outlined text-muted text-sm">sports_tennis</span>
-            <select 
-              className="border-0 bg-transparent fw-bold text-xs p-0 text-jsc-primary" 
+            <select
+              className="border-0 bg-transparent fw-bold text-xs p-0 text-jsc-primary"
               style={{ outline: 'none', cursor: 'pointer' }}
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -348,7 +349,7 @@ export default function AdminDashboard({ currentUser }) {
         <>
           {/* Bento Stats Grid */}
           <div className="row g-4 mb-4">
-            
+
             {/* Left: Weekly Revenue Trend Chart */}
             <div className="col-12 col-lg-8">
               <div className="glass-panel p-4 shadow-sm" style={{ borderRadius: '16px' }}>
@@ -367,8 +368,8 @@ export default function AdminDashboard({ currentUser }) {
                     const badgeBg = isPositive ? 'rgba(121, 255, 91, 0.15)' : 'rgba(239, 68, 68, 0.15)';
                     const badgeBorder = isPositive ? '1px solid rgba(121, 255, 91, 0.3)' : '1px solid rgba(239, 68, 68, 0.3)';
                     return (
-                      <span 
-                        className="badge font-bold d-flex align-items-center gap-1 py-2 px-3" 
+                      <span
+                        className="badge font-bold d-flex align-items-center gap-1 py-2 px-3"
                         style={{ backgroundColor: badgeBg, color: badgeColor, border: badgeBorder, borderRadius: '8px' }}
                       >
                         <span className="material-symbols-outlined text-xs" style={{ color: badgeColor }}>
@@ -388,11 +389,11 @@ export default function AdminDashboard({ currentUser }) {
             {/* Right: Summary cards stacked */}
             <div className="col-12 col-lg-4">
               <div className="d-flex flex-column h-100 gap-4">
-                
+
                 {/* Active Bookings card (Futuristic Sport Pass Design) */}
-                <div 
+                <div
                   className="p-4 rounded-4 shadow-sm flex-fill position-relative overflow-hidden text-white"
-                  style={{ 
+                  style={{
                     background: 'linear-gradient(135deg, #05070a 0%, #0d121c 100%)',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
                     borderRadius: '16px'
@@ -400,7 +401,7 @@ export default function AdminDashboard({ currentUser }) {
                 >
                   {/* Radial glow */}
                   <div className="position-absolute" style={{ width: '150px', height: '150px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(121, 255, 91, 0.1) 0%, transparent 70%)', top: '-50px', right: '-50px' }}></div>
-                  
+
                   <p className="font-label-caps text-white-50 text-xs mb-1">ACTIVE BOOKINGS</p>
                   <h3 className="font-headline-lg text-white mb-2" style={{ fontSize: '3rem', fontFamily: 'Plus Jakarta Sans', fontWeight: '800' }}>
                     {report.rekapitulasi.reduce((acc, curr) => acc + curr.jumlahPemesanan, 0)}
@@ -416,7 +417,7 @@ export default function AdminDashboard({ currentUser }) {
                   <p className="font-label-caps text-muted text-xs mb-1">TOP FACILITY</p>
                   <h4 className="font-headline-md text-jsc-primary font-bold mt-2 mb-1" style={{ fontFamily: 'Plus Jakarta Sans' }}>{getTopFacility()}</h4>
                   <p className="text-muted text-xs mb-4">Utilitas olahraga tertinggi minggu ini</p>
-                  
+
                   <div className="w-100 bg-black bg-opacity-10 rounded-pill mb-1" style={{ height: '8px', overflow: 'hidden' }}>
                     <div className="bg-dark rounded-pill h-100" style={{ width: '78%' }}></div>
                   </div>
@@ -435,7 +436,7 @@ export default function AdminDashboard({ currentUser }) {
           <div id="finances-section" className="glass-panel rounded-4 overflow-hidden mb-4 shadow-sm" style={{ borderRadius: '16px' }}>
             <div className="px-4 py-3 border-bottom border-light-subtle d-flex justify-content-between align-items-center bg-white bg-opacity-40">
               <h5 className="font-headline-md text-jsc-primary mb-0" style={{ fontFamily: 'Plus Jakarta Sans', fontSize: '18px' }}>Daily Transactions</h5>
-              <button 
+              <button
                 className="btn btn-jsc-navy btn-sm font-bold text-xs d-flex align-items-center gap-1.5 py-2 px-3"
                 onClick={() => alert('Fitur ekspor CSV diaktifkan pada Sprint berikutnya!')}
               >
@@ -463,7 +464,7 @@ export default function AdminDashboard({ currentUser }) {
                     report.transactions.map((trx) => {
                       const isVerified = trx.statusBayar === 'Verified';
                       const isFailed = trx.statusBayar === 'Failed';
-                      
+
                       let badgeStyle = { backgroundColor: 'rgba(250, 204, 21, 0.15)', color: 'var(--jsc-locked)', border: '1px solid rgba(250, 204, 21, 0.3)' };
                       let statusText = "Pending";
                       if (isVerified) {
@@ -509,8 +510,8 @@ export default function AdminDashboard({ currentUser }) {
                           <td className="px-4 py-3 font-semibold text-secondary text-sm">{bookingTime}</td>
                           <td className="px-4 py-3 font-bold text-sm">Rp {parseFloat(trx.jumlahBayar).toLocaleString()}</td>
                           <td className="px-4 py-3">
-                            <span 
-                              className="badge rounded-pill text-uppercase font-bold text-[9px] px-2.5 py-1.5" 
+                            <span
+                              className="badge rounded-pill text-uppercase font-bold text-[9px] px-2.5 py-1.5"
                               style={badgeStyle}
                             >
                               {statusText}
