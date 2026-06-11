@@ -2,6 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
 
+const getCategoryIcon = (cat) => {
+  if (!cat) return 'sports';
+  const c = cat.toLowerCase();
+  if (c.includes('futsal') || c.includes('bola') || c.includes('soccer') || c.includes('football')) return 'sports_soccer';
+  if (c.includes('basket')) return 'sports_basketball';
+  if (c.includes('badminton') || c.includes('bulu') || c.includes('tennis') || c.includes('tenis')) return 'sports_tennis';
+  if (c.includes('voli') || c.includes('volley')) return 'sports_volleyball';
+  if (c.includes('renang') || c.includes('swim')) return 'pool';
+  return 'sports';
+};
+
 export default function BookingPage({ currentUser, refreshUserPoints }) {
   const navigate = useNavigate();
   const [fields, setFields] = useState([]);
@@ -227,15 +238,23 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
     <div className="container py-4">
       {/* Hero Header */}
       <div 
-        className="jsc-hero-header tall position-relative overflow-hidden text-white rounded-4 mb-4 p-5 d-flex flex-column justify-content-end shadow-sm"
+        className="position-relative overflow-hidden text-white rounded-4 mb-4 p-5 d-flex flex-column justify-content-end shadow-sm"
         style={{
-          backgroundImage: 'linear-gradient(to top, rgba(0, 6, 19, 0.95), rgba(0, 6, 19, 0.2)), url("https://lh3.googleusercontent.com/aida/AP1WRLsxjKtjytd7fYWMKkifIoVGt1CythKp5sbmRmIu223cCOrl8MVD1_x8YnzUCSnZoZpU84kkb6FH733i-OGdQtiZmGxz9ThmDK7ZQiyNbqtf8JU1X1jIRGMMMyaghsWOyiO-4g_FCmlKj0TkYgXMCLME3Ox07_Lp2sw8zVgIu-uez-eN1n0nx1lIwxxl8Lg_8AylzmvetnlkBgIlzLZkOs06PE87aQyfHo7zvKlV7ThUL8cgpLf5xINs7Q")'
+          height: '240px',
+          backgroundImage: 'linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.3)), url("/images/hero-banner.svg"), url("https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1600")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          borderRadius: '16px'
         }}
       >
-        <span className="badge bg-jsc-lime text-jsc-navy font-label-caps align-self-start mb-2 px-3 py-2">
-          Premium Sports Facility
+        <span 
+          className="badge text-jsc-primary font-label-caps align-self-start mb-2 px-3 py-2 d-inline-flex align-items-center gap-1.5 border border-success border-opacity-25" 
+          style={{ borderRadius: '999px', backgroundColor: 'rgba(121, 255, 91, 0.2)' }}
+        >
+          <span className="spinner-grow spinner-grow-sm text-success" style={{ width: '8px', height: '8px', animationDuration: '1.5s' }} role="status"></span>
+          Available Now
         </span>
-        <h1 className="font-headline-lg mb-1">
+        <h1 className="font-headline-lg mb-1" style={{ fontFamily: 'Plus Jakarta Sans', fontSize: '36px', fontWeight: '800' }}>
           {selectedField ? selectedField.namaLapangan : 'Jakabaring Arena'}
         </h1>
         <p className="text-white-50 font-body-md mb-0">
@@ -249,76 +268,105 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
         <div className="col-12 col-lg-8 space-y-4">
           
           {/* Step 1: Select Field Card */}
-          <div className="bg-white p-4 rounded-3 shadow-sm border mb-4">
-            <h4 className="font-headline-md text-jsc-navy mb-3">1. Pilih Lapangan Utama</h4>
+          <div className="glass-panel p-4 rounded-4 mb-4" style={{ borderRadius: '16px' }}>
+            <h4 className="font-headline-md text-jsc-primary mb-3" style={{ fontFamily: 'Plus Jakarta Sans' }}>1. Pilih Lapangan Olahraga</h4>
             <div className="row g-3">
-              {fields.map((f) => (
-                <div className="col-12 col-md-4" key={f.id}>
-                  <div 
-                    className={`card h-100 cursor-pointer border-2 transition-all ${selectedField && selectedField.id === f.id ? 'border-jsc-green bg-light bg-opacity-50' : 'border-light'}`}
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleSelectField(f)}
-                  >
-                    <div className="card-body">
-                      <div className="d-flex align-items-center gap-2 mb-2">
-                        <span className="material-symbols-outlined text-jsc-lime">
-                          {f.kategori === 'Futsal' ? 'sports_soccer' : f.kategori === 'Basket' ? 'sports_basketball' : 'sports_tennis'}
-                        </span>
-                        <span className="badge bg-jsc-navy font-label-caps">{f.kategori}</span>
+              {fields.map((f) => {
+                const isSelected = selectedField && selectedField.id === f.id;
+                return (
+                  <div className="col-12 col-md-4" key={f.id}>
+                    <div 
+                      className={`card h-100 cursor-pointer border-2 transition-all duration-200 overflow-hidden ${isSelected ? 'neon-ring-lime bg-white' : 'border-light'}`}
+                      style={{ cursor: 'pointer', borderRadius: '12px' }}
+                      onClick={() => handleSelectField(f)}
+                    >
+                      {/* Field Image Preview */}
+                      <div className="position-relative overflow-hidden" style={{ height: '120px' }}>
+                        <img 
+                          src={f.kategori === 'Futsal' ? '/images/futsal.svg' : f.kategori === 'Basket' ? '/images/basketball.svg' : '/images/badminton.svg'} 
+                          alt={f.namaLapangan} 
+                          className="w-100 h-100 object-fit-cover"
+                          style={{ objectFit: 'cover' }}
+                          onError={(e) => {
+                            // Fallback to stock sport photos if local image is not set yet
+                            e.target.src = f.kategori === 'Futsal' 
+                              ? 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=500' 
+                              : f.kategori === 'Basket'
+                              ? 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=500'
+                              : 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=500';
+                          }}
+                        />
+                        {/* Rating indicator */}
+                        <div 
+                          className="position-absolute top-2 end-2 px-2 py-0.5 rounded-full d-flex align-items-center gap-0.5 font-bold"
+                          style={{ fontSize: '10px', backgroundColor: 'rgba(255,255,255,0.9)', color: '#000', zIndex: 10 }}
+                        >
+                          <span className="material-symbols-outlined text-warning" style={{ fontSize: '12px', fontVariationSettings: "'FILL' 1" }}>star</span>
+                          <span>4.9</span>
+                        </div>
                       </div>
-                      <h6 className="card-title font-bold text-jsc-primary mb-1">{f.namaLapangan}</h6>
-                      <p className="card-text text-muted text-xs mb-0">Rp {parseInt(f.hargaPerJam).toLocaleString()} / jam</p>
+
+                      <div className="card-body p-3">
+                        <div className="d-flex align-items-center gap-1.5 mb-2">
+                          <span className="material-symbols-outlined text-success" style={{ fontSize: '20px' }}>
+                            {getCategoryIcon(f.kategori)}
+                          </span>
+                          <span className="badge bg-jsc-primary font-label-caps" style={{ fontSize: '9px' }}>{f.kategori}</span>
+                        </div>
+                        <h6 className="card-title font-bold text-jsc-primary mb-1" style={{ fontSize: '14px' }}>{f.namaLapangan}</h6>
+                        <p className="card-text text-muted text-xs mb-0">Rp {parseInt(f.hargaPerJam).toLocaleString()} / jam</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
           {/* Step 2: Date Selector Bar */}
-          <div className="bg-white border p-3 rounded-3 shadow-sm d-flex justify-content-between align-items-center mb-4">
+          <div className="glass-panel p-3 rounded-4 d-flex justify-content-between align-items-center mb-4" style={{ borderRadius: '16px' }}>
             <div className="d-flex align-items-center gap-3">
-              <span className="material-symbols-outlined text-jsc-navy">calendar_today</span>
+              <span className="material-symbols-outlined text-jsc-primary">calendar_today</span>
               <input 
                 type="date" 
-                className="form-control form-control-sm border-0 fw-bold p-0 text-jsc-navy"
-                style={{ width: '150px', outline: 'none', boxShadow: 'none' }}
+                className="form-control form-control-sm border-0 fw-bold p-0 text-jsc-primary bg-transparent"
+                style={{ width: '150px', outline: 'none', boxShadow: 'none', fontSize: '15px' }}
                 value={date}
                 onChange={(e) => { setDate(e.target.value); }}
               />
             </div>
-            <span className="badge bg-jsc-navy text-xs px-3 py-2">Waktu Lokal Palembang</span>
+            <span className="badge bg-jsc-primary text-xs px-3 py-2" style={{ borderRadius: '99px' }}>Waktu Lokal Palembang</span>
           </div>
 
           {/* Legend */}
           <div className="d-flex flex-wrap gap-4 px-2 mb-4">
-            <div className="d-flex align-items-center gap-1">
+            <div className="d-flex align-items-center gap-1.5">
               <div className="rounded-circle border" style={{ width: '12px', height: '12px', backgroundColor: '#fff' }}></div>
-              <span className="text-xs text-muted">Available</span>
+              <span className="text-xs text-muted fw-semibold">Available</span>
             </div>
-            <div className="d-flex align-items-center gap-1">
+            <div className="d-flex align-items-center gap-1.5">
               <div className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: '#E11D48' }}></div>
-              <span className="text-xs text-muted">Booked (Lunas)</span>
+              <span className="text-xs text-muted fw-semibold">Booked</span>
             </div>
-            <div className="d-flex align-items-center gap-1">
+            <div className="d-flex align-items-center gap-1.5">
               <div className="rounded-circle hash-pattern" style={{ width: '12px', height: '12px', border: '1px solid #FACC15' }}></div>
-              <span className="text-xs text-muted">Locked/Processing</span>
+              <span className="text-xs text-muted fw-semibold">Processing</span>
             </div>
-            <div className="d-flex align-items-center gap-1">
-              <div className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: '#006e0a' }}></div>
-              <span className="text-xs text-muted">Selected</span>
+            <div className="d-flex align-items-center gap-1.5">
+              <div className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: '#79ff5b', boxShadow: '0 0 8px rgba(121,255,91,0.6)' }}></div>
+              <span className="text-xs text-muted fw-semibold">Selected</span>
             </div>
-            <div className="d-flex align-items-center gap-1">
-              <div className="rounded-circle bg-secondary bg-opacity-50" style={{ width: '12px', height: '12px' }}></div>
-              <span className="text-xs text-muted">Maintenance</span>
+            <div className="d-flex align-items-center gap-1.5">
+              <div className="rounded-circle bg-secondary bg-opacity-25" style={{ width: '12px', height: '12px' }}></div>
+              <span className="text-xs text-muted fw-semibold">Maintenance</span>
             </div>
           </div>
 
           {/* Step 3: Slots Grid */}
-          <div className="bg-white p-4 rounded-3 shadow-sm border">
+          <div className="glass-panel p-4 rounded-4" style={{ borderRadius: '16px' }}>
             
             {/* Morning Sessions */}
-            <h5 className="font-label-caps text-muted border-bottom pb-2 mb-3">Morning Sessions</h5>
+            <h5 className="font-label-caps text-muted border-bottom pb-2 mb-3">Sesi Pagi (Morning)</h5>
             <div className="row g-3 mb-4">
               {slotsConfig.morning.map((slot) => {
                 const slotStatus = getSlotStatus(slot);
@@ -335,11 +383,11 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
                   icon = "sync";
                   textClass = "text-warning";
                 } else if (slotStatus === 'selected') {
-                  cardClass = "border-jsc-green bg-light bg-opacity-70";
+                  cardClass = "neon-ring-lime bg-white";
                   icon = "check_circle";
                   textClass = "text-success";
                 } else if (slotStatus === 'maintenance') {
-                  cardClass = "bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 opacity-75";
+                  cardClass = "bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10 opacity-75";
                   icon = "settings";
                   textClass = "text-secondary";
                 }
@@ -347,28 +395,28 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
                 return (
                   <div className="col-12 col-md-6 col-lg-4" key={slot.id}>
                     <div 
-                      className={`card p-3 border-2 position-relative overflow-hidden cursor-pointer transition-all ${cardClass}`}
-                      style={{ cursor: 'pointer' }}
+                      className={`card p-3 border-2 position-relative overflow-hidden cursor-pointer transition-all duration-200 ${cardClass}`}
+                      style={{ cursor: 'pointer', borderRadius: '12px' }}
                       onClick={() => handleSelectSlot(slot)}
                     >
                       {slotStatus === 'selected' && (
                         <div 
-                          className="position-absolute top-0 end-0 bg-jsc-secondary text-white px-2 py-0.5 rounded-bottom text-[10px] font-bold"
-                          style={{ fontSize: '9px' }}
+                          className="position-absolute top-0 end-0 text-jsc-primary px-2 py-0.5 rounded-bottom font-bold"
+                          style={{ fontSize: '9px', backgroundColor: 'var(--jsc-secondary-lime)' }}
                         >
                           SELECTED
                         </div>
                       )}
                       <div className="d-flex justify-content-between align-items-center">
                         <div>
-                          <p className="font-bold text-base mb-0">{slot.start} - {slot.end}</p>
+                          <p className="font-bold text-base mb-0" style={{ fontSize: '15px' }}>{slot.start} - {slot.end}</p>
                           <p className="text-muted text-xs mb-0">{slot.label}</p>
                         </div>
                         <div className={`d-flex flex-column align-items-end ${textClass}`}>
                           <span className="material-symbols-outlined text-lg">
                             {icon}
                           </span>
-                          <span className="font-bold text-xs mt-1">Rp {parseInt(pricePerHour).toLocaleString()}</span>
+                          <span className="font-bold text-xs mt-1" style={{ fontFamily: 'JetBrains Mono' }}>Rp {parseInt(pricePerHour).toLocaleString()}</span>
                         </div>
                       </div>
                     </div>
@@ -378,7 +426,7 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
             </div>
 
             {/* Afternoon & Evening Sessions */}
-            <h5 className="font-label-caps text-muted border-bottom pb-2 mb-3">Afternoon &amp; Evening Sessions</h5>
+            <h5 className="font-label-caps text-muted border-bottom pb-2 mb-3">Sesi Sore &amp; Malam</h5>
             <div className="row g-3">
               {slotsConfig.afternoon.map((slot) => {
                 const slotStatus = getSlotStatus(slot);
@@ -395,11 +443,11 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
                   icon = "sync";
                   textClass = "text-warning";
                 } else if (slotStatus === 'selected') {
-                  cardClass = "border-jsc-green bg-light bg-opacity-70";
+                  cardClass = "neon-ring-lime bg-white";
                   icon = "check_circle";
                   textClass = "text-success";
                 } else if (slotStatus === 'maintenance') {
-                  cardClass = "bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 opacity-75";
+                  cardClass = "bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10 opacity-75";
                   icon = "settings";
                   textClass = "text-secondary";
                 }
@@ -407,28 +455,28 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
                 return (
                   <div className="col-12 col-md-6 col-lg-4" key={slot.id}>
                     <div 
-                      className={`card p-3 border-2 position-relative overflow-hidden cursor-pointer transition-all ${cardClass}`}
-                      style={{ cursor: 'pointer' }}
+                      className={`card p-3 border-2 position-relative overflow-hidden cursor-pointer transition-all duration-200 ${cardClass}`}
+                      style={{ cursor: 'pointer', borderRadius: '12px' }}
                       onClick={() => handleSelectSlot(slot)}
                     >
                       {slotStatus === 'selected' && (
                         <div 
-                          className="position-absolute top-0 end-0 bg-jsc-secondary text-white px-2 py-0.5 rounded-bottom text-[10px] font-bold"
-                          style={{ fontSize: '9px' }}
+                          className="position-absolute top-0 end-0 text-jsc-primary px-2 py-0.5 rounded-bottom font-bold"
+                          style={{ fontSize: '9px', backgroundColor: 'var(--jsc-secondary-lime)' }}
                         >
                           SELECTED
                         </div>
                       )}
                       <div className="d-flex justify-content-between align-items-center">
                         <div>
-                          <p className="font-bold text-base mb-0">{slot.start} - {slot.end}</p>
+                          <p className="font-bold text-base mb-0" style={{ fontSize: '15px' }}>{slot.start} - {slot.end}</p>
                           <p className="text-muted text-xs mb-0">{slot.label}</p>
                         </div>
                         <div className={`d-flex flex-column align-items-end ${textClass}`}>
                           <span className="material-symbols-outlined text-lg">
                             {icon}
                           </span>
-                          <span className="font-bold text-xs mt-1">Rp {parseInt(pricePerHour).toLocaleString()}</span>
+                          <span className="font-bold text-xs mt-1" style={{ fontFamily: 'JetBrains Mono' }}>Rp {parseInt(pricePerHour).toLocaleString()}</span>
                         </div>
                       </div>
                     </div>
@@ -453,37 +501,37 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
 
         {/* Right column: Sticky Summary Panel */}
         <div className="col-12 col-lg-4">
-          <div className="card shadow-sm border rounded-3 overflow-hidden">
-            <div className="bg-jsc-navy text-white p-4">
-              <h5 className="font-headline-md mb-1">Booking Summary</h5>
-              <p className="text-white-50 text-xs mb-0">Review your selection for Arena</p>
+          <div className="glass-panel overflow-hidden shadow-sm" style={{ borderRadius: '16px' }}>
+            <div className="bg-jsc-primary text-white p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}>
+              <h5 className="font-headline-md mb-1" style={{ fontFamily: 'Plus Jakarta Sans' }}>Ringkasan Sewa</h5>
+              <p className="text-white-50 text-xs mb-0">Tinjau jadwal lapangan pilihan Anda</p>
             </div>
             
-            <div className="card-body p-4">
+            <div className="card-body p-4 bg-white bg-opacity-95">
               <div className="d-flex align-items-center gap-3 mb-4">
                 <div 
                   className="bg-light rounded d-flex align-items-center justify-content-center border"
-                  style={{ width: '40px', height: '40px' }}
+                  style={{ width: '40px', height: '40px', borderRadius: '8px' }}
                 >
-                  <span className="material-symbols-outlined text-jsc-navy">calendar_today</span>
+                  <span className="material-symbols-outlined text-jsc-primary">calendar_today</span>
                 </div>
                 <div>
-                  <p className="text-muted text-xs font-medium uppercase mb-0">Booking Date</p>
+                  <p className="text-muted text-xs font-medium uppercase mb-0">Tanggal Main</p>
                   <p className="font-bold text-sm mb-0">{date}</p>
                 </div>
               </div>
 
               <div className="mb-4">
-                <p className="text-xs text-muted font-medium uppercase border-b pb-1 mb-2">Selected Slots</p>
+                <p className="text-xs text-muted font-medium uppercase border-bottom pb-1 mb-2">Slot Dipilih</p>
                 {selectedSlots.length > 0 ? (
                   selectedSlots.map((slot) => (
-                    <div className="d-flex justify-content-between align-items-center py-1" key={slot.id}>
+                    <div className="d-flex justify-content-between align-items-center py-1.5" key={slot.id}>
                       <div className="d-flex align-items-center gap-2">
-                        <span className="rounded-circle bg-jsc-secondary" style={{ width: '8px', height: '8px' }}></span>
+                        <span className="rounded-circle bg-jsc-primary" style={{ width: '8px', height: '8px' }}></span>
                         <p className="text-sm font-semibold mb-0">{slot.start} - {slot.end}</p>
                       </div>
                       <div className="d-flex align-items-center gap-3">
-                        <p className="text-sm font-bold mb-0">Rp {parseInt(pricePerHour).toLocaleString()}</p>
+                        <p className="text-sm font-bold mb-0" style={{ fontFamily: 'JetBrains Mono' }}>Rp {parseInt(pricePerHour).toLocaleString()}</p>
                       </div>
                     </div>
                   ))
@@ -494,16 +542,16 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
 
               <div className="pt-3 border-top space-y-2">
                 <div className="d-flex justify-content-between text-sm mb-2">
-                  <span className="text-muted">Subtotal ({totalSlots} Slot)</span>
+                  <span className="text-muted">Subtotal ({totalSlots} Sesi)</span>
                   <span className="fw-semibold">Rp {rawTotal.toLocaleString()}</span>
                 </div>
                 <div className="d-flex justify-content-between text-sm mb-3">
-                  <span className="text-muted">Admin Fee (5%)</span>
+                  <span className="text-muted">Biaya Layanan (5%)</span>
                   <span className="fw-semibold">Rp {adminFee.toLocaleString()}</span>
                 </div>
-                <div className="d-flex justify-content-between text-lg font-bold pt-3 border-top border-dashed">
-                  <span>Total Price</span>
-                  <span className="text-jsc-navy">Rp {grandTotal.toLocaleString()}</span>
+                <div className="d-flex justify-content-between text-lg font-bold pt-3 border-top border-dashed" style={{ borderTopStyle: 'dashed' }}>
+                  <span>Total Bayar</span>
+                  <span className="text-jsc-primary" style={{ fontSize: '20px', fontWeight: '800' }}>Rp {grandTotal.toLocaleString()}</span>
                 </div>
               </div>
 
@@ -513,11 +561,11 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
                 onClick={handleProceedBooking}
                 disabled={selectedSlots.length === 0 || bookingLoading}
               >
-                <span>Proceed to Payment</span>
+                <span>Lanjutkan Pembayaran</span>
                 <span className="material-symbols-outlined text-sm">arrow_forward</span>
               </button>
 
-              <div className="d-flex align-items-center justify-content-center gap-1 text-muted text-xs py-2 bg-light rounded mt-3">
+              <div className="d-flex align-items-center justify-content-center gap-1 text-muted text-[10px] py-2 bg-light rounded mt-3" style={{ borderRadius: '8px' }}>
                 <span className="material-symbols-outlined text-xs">lock</span>
                 <span>256-bit Secure Transaction</span>
               </div>
@@ -530,11 +578,11 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
       {selectedSlots.length > 0 && (
         <div 
           className="fixed-bottom bg-white border-top shadow-lg p-3 d-lg-none d-flex justify-content-between align-items-center animate-slide-up"
-          style={{ zIndex: 1020 }}
+          style={{ zIndex: 1020, borderTopLeftRadius: '16px', borderTopRightRadius: '16px', paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
         >
           <div>
             <p className="text-xs text-muted mb-0">{selectedSlots.length} Slot Terpilih</p>
-            <h5 className="font-bold text-jsc-navy mb-0">Rp {grandTotal.toLocaleString()}</h5>
+            <h5 className="font-bold text-jsc-primary mb-0">Rp {grandTotal.toLocaleString()}</h5>
           </div>
           <button 
             type="button" 
@@ -550,28 +598,28 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
 
       {/* Payment Simulation Modal */}
       {showPaymentModal && pendingBooking && (
-        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)' }}>
+        <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', zIndex: 1060 }}>
           <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content border-0 shadow-lg">
-              <div className="modal-header bg-jsc-navy text-white">
-                <h5 className="modal-title font-headline-md">Checkout - Pembayaran Simulator</h5>
+            <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '16px', overflow: 'hidden' }}>
+              <div className="modal-header bg-jsc-primary text-white py-3" style={{ backgroundColor: 'rgba(0,0,0,0.95)' }}>
+                <h5 className="modal-title font-headline-md" style={{ fontFamily: 'Plus Jakarta Sans' }}>Checkout Simulator</h5>
                 <button type="button" className="btn-close btn-close-white" onClick={() => setShowPaymentModal(false)}></button>
               </div>
-              <div className="modal-body p-4">
-                <div className="alert alert-warning border-0 rounded-3 text-xs mb-4">
-                  <strong>Simulasi Finansial:</strong> Integrasi Webhook Simulator. Anda dapat menyetujui transaksi untuk memperbarui poin loyalitas.
+              <div className="modal-body p-4 bg-light bg-opacity-95">
+                <div className="alert alert-warning border-0 rounded-3 text-xs mb-4" style={{ borderRadius: '8px' }}>
+                  <strong>Simulasi Finansial:</strong> Integrasi Webhook Simulator. Selesaikan transaksi untuk mendapatkan poin loyalitas.
                 </div>
                 
                 <div className="mb-3">
-                  <p className="text-xs text-muted font-bold uppercase mb-1">Pesanan ID</p>
-                  <p className="font-bold text-sm">
+                  <p className="text-[10px] text-muted font-bold uppercase mb-1">Pesanan ID</p>
+                  <p className="font-bold text-sm text-jsc-primary">
                     #{Array.isArray(pendingBooking) ? pendingBooking.map(b => b.id).join(', #') : pendingBooking.id}
                   </p>
                 </div>
 
                 <div className="mb-3">
-                  <p className="text-xs text-muted font-bold uppercase mb-1">Total Tagihan</p>
-                  <h3 className="font-bold text-jsc-navy">
+                  <p className="text-[10px] text-muted font-bold uppercase mb-1">Total Tagihan</p>
+                  <h3 className="font-bold text-jsc-primary" style={{ fontSize: '26px' }}>
                     Rp {
                       (Array.isArray(pendingBooking)
                         ? pendingBooking.reduce((sum, b) => sum + parseFloat(b.totalHarga), 0)
@@ -584,9 +632,10 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
                 <div className="mb-4">
                   <label className="form-label text-xs text-muted font-bold uppercase mb-1">Metode Pembayaran</label>
                   <select 
-                    className="form-select" 
+                    className="form-select text-sm py-2" 
                     value={paymentMethod} 
                     onChange={(e) => setPaymentMethod(e.target.value)}
+                    style={{ borderRadius: '8px' }}
                   >
                     <option value="E-Wallet">ShopeePay / GoPay (E-Wallet)</option>
                     <option value="Transfer Bank">Virtual Account Mandiri (Transfer Bank)</option>
@@ -611,6 +660,7 @@ export default function BookingPage({ currentUser, refreshUserPoints }) {
                       className="btn btn-outline-danger w-100 py-3 font-bold d-flex align-items-center justify-content-center gap-2"
                       onClick={() => handleSimulatePayment('Failed')}
                       disabled={paymentLoading}
+                      style={{ borderRadius: '8px' }}
                     >
                       <span className="material-symbols-outlined text-sm">close</span>
                       <span>Gagalkan</span>

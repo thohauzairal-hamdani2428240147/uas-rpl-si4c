@@ -35,8 +35,15 @@ const AdminController = {
         raw: true
       });
 
-      // Standard categories list
-      const allCategories = ['Futsal', 'Basket', 'Badminton'];
+      // Dynamic categories list from existing fields
+      const existingFields = await Lapangan.findAll({
+        attributes: [[sequelize.fn('DISTINCT', sequelize.col('kategori')), 'kategori']],
+        raw: true
+      });
+      const allCategories = Array.from(new Set([
+        'Futsal', 'Basket', 'Badminton',
+        ...existingFields.map(f => f.kategori).filter(Boolean)
+      ]));
       
       // Map and fill 0 for categories with no bookings
       const rekapitulasi = allCategories.map(cat => {
@@ -66,13 +73,54 @@ const AdminController = {
         }]
       });
 
+      // 4. Fetch daily data for the last 60 days to support dynamic frontend chart filtering
+      const sixtyDaysAgo = new Date();
+      sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+
+      const paymentsForTrend = await Pembayaran.findAll({
+        where: {
+          statusBayar: 'Verified',
+          createdAt: {
+            [Op.gte]: sixtyDaysAgo
+          }
+        },
+        include: [{
+          model: Pemesanan,
+          as: 'pemesanan',
+          include: [{
+            model: Lapangan,
+            as: 'lapangan',
+            attributes: ['kategori']
+          }]
+        }]
+      });
+
+      const dailyData = paymentsForTrend.map(p => {
+        const hasBookings = Array.isArray(p.pemesanan) && p.pemesanan.length > 0;
+        let dateStr;
+        if (hasBookings) {
+          dateStr = p.pemesanan[0].tanggal; // Use booking play date format YYYY-MM-DD
+        } else {
+          const localDate = new Date(p.createdAt.getTime() - (p.createdAt.getTimezoneOffset() * 60000));
+          dateStr = localDate.toISOString().split('T')[0];
+        }
+        const categories = p.pemesanan ? p.pemesanan.map(b => b.lapangan ? b.lapangan.kategori : null).filter(Boolean) : [];
+        const category = categories[0] || 'Lainnya';
+        return {
+          date: dateStr,
+          amount: parseFloat(p.jumlahBayar) || 0.0,
+          kategori: category
+        };
+      });
+
       return res.status(200).json({
         status: 'success',
         message: 'Laporan pendapatan admin berhasil dimuat.',
         data: {
           totalPendapatan: parseFloat(totalPendapatan) || 0.0,
           rekapitulasi,
-          transactions
+          transactions,
+          dailyData
         }
       });
     } catch (error) {

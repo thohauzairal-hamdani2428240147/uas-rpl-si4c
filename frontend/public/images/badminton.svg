@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bg-glow" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0b2024" />
+      <stop offset="100%" stop-color="#05070a" />
+    </radialGradient>
+    
+    <!-- Neon Cyan Gradient -->
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00daf3" />
+      <stop offset="100%" stop-color="#79ff5b" />
+    </linearGradient>
+
+    <!-- Pitch Line Pattern -->
+    <pattern id="court-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bg-glow)" />
+  <rect width="800" height="600" fill="url(#court-grid)" />
+
+  <!-- Abstract Design Elements -->
+  <circle cx="400" cy="300" r="250" fill="none" stroke="rgba(0, 218, 243, 0.05)" stroke-width="2" />
+  <circle cx="400" cy="300" r="180" fill="none" stroke="url(#cyan-glow)" stroke-width="1" stroke-dasharray="10 15" opacity="0.3" />
+
+  <!-- Shuttlecock Graphic -->
+  <g transform="translate(400, 300)">
+    <!-- Rackets Crossed Silhouette in background -->
+    <path d="M -80,80 L -20,20" stroke="rgba(255,255,255,0.06)" stroke-width="4" stroke-linecap="round" />
+    <circle cx="-15" cy="15" r="25" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3" />
+    <path d="M 80,80 L 20,20" stroke="rgba(255,255,255,0.06)" stroke-width="4" stroke-linecap="round" />
+    <circle cx="15" cy="15" r="25" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3" />
+    
+    <!-- Inner Glow -->
+    <circle cx="0" cy="-10" r="90" fill="rgba(0, 218, 243, 0.1)" filter="blur(10px)" />
+    
+    <!-- Shuttlecock Body -->
+    <g transform="scale(1.1)">
+      <!-- Feathers -->
+      <path d="M -35,-50 L -15,20 L 15,20 L 35,-50 Z" fill="none" stroke="url(#cyan-glow)" stroke-width="3" />
+      <path d="M -25,-50 L -10,20 M -15,-50 L -5,20 M 0,-50 L 0,20 M 15,-50 L 10,20 M 25,-50 L 5,20" stroke="url(#cyan-glow)" stroke-width="2" />
+      <path d="M -30,-25 L 30,-25 M -25,-5 L 25,-5" stroke="url(#cyan-glow)" stroke-width="2.5" />
+      
+      <!-- Cork Base -->
+      <path d="M -16,20 C -16,35 16,35 16,20 Z" fill="#0c0e12" stroke="url(#cyan-glow)" stroke-width="4" />
+      <path d="M -16,20 L 16,20" stroke="url(#cyan-glow)" stroke-width="3" />
+    </g>
+  </g>
+
+  <!-- Typography Brand -->
+  <text x="400" y="520" text-anchor="middle" fill="#00daf3" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="28" letter-spacing="4">BADMINTON COURT</text>
+  <text x="400" y="550" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="'JetBrains Mono', monospace" font-weight="500" font-size="12" letter-spacing="1">PROARENA ELITE CLUB</text>
+</svg>

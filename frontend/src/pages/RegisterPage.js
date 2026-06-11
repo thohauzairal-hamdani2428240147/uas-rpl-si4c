@@ -49,7 +49,7 @@ export default function RegisterPage({ onLoginSuccess }) {
       localStorage.setItem('user', JSON.stringify(res.data));
       onLoginSuccess(res.token, res.data);
       
-      alert('Registrasi Berhasil! Selamat datang di JSC Arena Booking.');
+      alert('Registrasi Berhasil! Selamat datang di JSC SportPass.');
       navigate('/');
     } catch (err) {
       console.error(err);
@@ -63,31 +63,39 @@ export default function RegisterPage({ onLoginSuccess }) {
     <div 
       className="min-vh-100 d-flex align-items-center justify-content-center px-3 py-5"
       style={{
-        backgroundImage: 'radial-gradient(circle at 10% 20%, rgb(0, 31, 63) 0%, rgb(0, 6, 19) 90.1%)',
-        backgroundColor: '#000613'
+        backgroundImage: 'linear-gradient(to bottom, rgba(9, 13, 22, 0.2), rgba(2, 3, 5, 0.4)), url("/images/hero-banner.svg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundColor: '#020305'
       }}
     >
-      <div className="card border-0 shadow-lg overflow-hidden w-100" style={{ maxWidth: '460px', borderRadius: '16px' }}>
+      <div 
+        className="w-100 shadow-2xl" 
+        style={{ 
+          maxWidth: '460px', 
+          borderRadius: '24px', 
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(121, 255, 91, 0.2) 100%)', 
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.6)',
+          overflow: 'hidden'
+        }}
+      >
         {/* Header */}
-        <div className="bg-jsc-navy text-white text-center p-4 position-relative">
-          <div 
-            className="position-absolute top-0 start-0 w-100 h-100 opacity-10" 
-            style={{
-              backgroundImage: 'radial-gradient(var(--jsc-secondary-lime) 1px, transparent 0)',
-              backgroundSize: '16px 16px'
-            }}
-          />
-          <span className="material-symbols-outlined text-jsc-lime mb-2" style={{ fontSize: '48px' }}>
-            app_registration
-          </span>
-          <h3 className="font-headline-md font-bold mb-1">Daftar Akun JSC</h3>
-          <p className="text-white-50 text-xs mb-0">Bergabung untuk memesan lapangan olahraga premium</p>
+        <div className="text-center pt-5 pb-4 px-4">
+          <h3 className="font-headline-md font-bold mb-1" style={{ fontFamily: 'Plus Jakarta Sans', color: '#0B0D14', fontWeight: '800', letterSpacing: '-0.5px' }}>
+            Buat Akun Baru
+          </h3>
+          <p className="text-muted text-xs mb-0 fw-semibold">Daftar untuk memesan lapangan olahraga premium</p>
         </div>
 
         {/* Form Body */}
-        <div className="card-body p-4 bg-white">
+        <div className="p-4 pt-0">
           {error && (
-            <div className="alert alert-danger border-0 rounded-3 text-xs p-3 mb-3 d-flex align-items-center gap-2">
+            <div 
+              className="alert alert-danger border-0 text-xs p-3 mb-4 d-flex align-items-center gap-2"
+              style={{ borderRadius: '12px', backgroundColor: 'rgba(239, 68, 68, 0.12)', color: '#b30000', border: '1px solid rgba(239, 68, 68, 0.2)' }}
+            >
               <span className="material-symbols-outlined text-base">error</span>
               <span>{error}</span>
             </div>
@@ -95,79 +103,149 @@ export default function RegisterPage({ onLoginSuccess }) {
 
           <form onSubmit={handleSubmit} className="space-y-3">
             <div className="mb-3">
-              <label className="form-label text-xs fw-bold text-muted uppercase">Nama Lengkap</label>
-              <input 
-                type="text" 
-                name="nama"
-                className="form-control bg-light border-0 text-sm py-2" 
-                placeholder="Masukkan nama lengkap Anda"
-                value={formData.nama}
-                onChange={handleChange}
-                disabled={loading}
-              />
+              <label className="form-label text-xs fw-bold text-dark text-opacity-75 uppercase mb-2" style={{ letterSpacing: '0.5px' }}>Nama Lengkap</label>
+              <div 
+                className="input-group rounded-3 overflow-hidden" 
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.65)', 
+                  border: '1px solid rgba(0, 0, 0, 0.12)' 
+                }}
+              >
+                <span className="input-group-text bg-transparent border-0 pe-1 text-muted">
+                  <span className="material-symbols-outlined text-sm">assignment_ind</span>
+                </span>
+                <input 
+                  type="text" 
+                  name="nama"
+                  className="form-control bg-transparent border-0 ps-1 text-sm py-2.5 text-dark" 
+                  placeholder="Masukkan nama lengkap Anda"
+                  value={formData.nama}
+                  onChange={handleChange}
+                  disabled={loading}
+                  style={{ boxShadow: 'none', color: '#000' }}
+                  required
+                />
+              </div>
             </div>
 
             <div className="mb-3">
-              <label className="form-label text-xs fw-bold text-muted uppercase">Nickname</label>
-              <input 
-                type="text" 
-                name="nickname"
-                className="form-control bg-light border-0 text-sm py-2" 
-                placeholder="Pilih nickname unik (misal: ahmad123)"
-                value={formData.nickname}
-                onChange={handleChange}
-                disabled={loading}
-              />
+              <label className="form-label text-xs fw-bold text-dark text-opacity-75 uppercase mb-2" style={{ letterSpacing: '0.5px' }}>Nickname</label>
+              <div 
+                className="input-group rounded-3 overflow-hidden" 
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.65)', 
+                  border: '1px solid rgba(0, 0, 0, 0.12)' 
+                }}
+              >
+                <span className="input-group-text bg-transparent border-0 pe-1 text-muted">
+                  <span className="material-symbols-outlined text-sm">person</span>
+                </span>
+                <input 
+                  type="text" 
+                  name="nickname"
+                  className="form-control bg-transparent border-0 ps-1 text-sm py-2.5 text-dark" 
+                  placeholder="Pilih nickname unik (misal: ahmad123)"
+                  value={formData.nickname}
+                  onChange={handleChange}
+                  disabled={loading}
+                  style={{ boxShadow: 'none', color: '#000' }}
+                  required
+                />
+              </div>
             </div>
 
             <div className="mb-3">
-              <label className="form-label text-xs fw-bold text-muted uppercase">Email</label>
-              <input 
-                type="email" 
-                name="email"
-                className="form-control bg-light border-0 text-sm py-2" 
-                placeholder="Masukkan alamat email aktif"
-                value={formData.email}
-                onChange={handleChange}
-                disabled={loading}
-              />
+              <label className="form-label text-xs fw-bold text-dark text-opacity-75 uppercase mb-2" style={{ letterSpacing: '0.5px' }}>Email</label>
+              <div 
+                className="input-group rounded-3 overflow-hidden" 
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.65)', 
+                  border: '1px solid rgba(0, 0, 0, 0.12)' 
+                }}
+              >
+                <span className="input-group-text bg-transparent border-0 pe-1 text-muted">
+                  <span className="material-symbols-outlined text-sm">mail</span>
+                </span>
+                <input 
+                  type="email" 
+                  name="email"
+                  className="form-control bg-transparent border-0 ps-1 text-sm py-2.5 text-dark" 
+                  placeholder="Masukkan alamat email aktif"
+                  value={formData.email}
+                  onChange={handleChange}
+                  disabled={loading}
+                  style={{ boxShadow: 'none', color: '#000' }}
+                  required
+                />
+              </div>
             </div>
 
             <div className="mb-3">
-              <label className="form-label text-xs fw-bold text-muted uppercase">Password</label>
-              <input 
-                type="password" 
-                name="password"
-                className="form-control bg-light border-0 text-sm py-2" 
-                placeholder="Buat password minimal 6 karakter"
-                value={formData.password}
-                onChange={handleChange}
-                disabled={loading}
-              />
+              <label className="form-label text-xs fw-bold text-dark text-opacity-75 uppercase mb-2" style={{ letterSpacing: '0.5px' }}>Password</label>
+              <div 
+                className="input-group rounded-3 overflow-hidden" 
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.65)', 
+                  border: '1px solid rgba(0, 0, 0, 0.12)' 
+                }}
+              >
+                <span className="input-group-text bg-transparent border-0 pe-1 text-muted">
+                  <span className="material-symbols-outlined text-sm">lock</span>
+                </span>
+                <input 
+                  type="password" 
+                  name="password"
+                  className="form-control bg-transparent border-0 ps-1 text-sm py-2.5 text-dark" 
+                  placeholder="Buat password minimal 6 karakter"
+                  value={formData.password}
+                  onChange={handleChange}
+                  disabled={loading}
+                  style={{ boxShadow: 'none', color: '#000' }}
+                  required
+                />
+              </div>
             </div>
 
             <div className="mb-4">
-              <label className="form-label text-xs fw-bold text-muted uppercase">Konfirmasi Password</label>
-              <input 
-                type="password" 
-                name="confirmPassword"
-                className="form-control bg-light border-0 text-sm py-2" 
-                placeholder="Masukkan kembali password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                disabled={loading}
-              />
+              <label className="form-label text-xs fw-bold text-dark text-opacity-75 uppercase mb-2" style={{ letterSpacing: '0.5px' }}>Konfirmasi Password</label>
+              <div 
+                className="input-group rounded-3 overflow-hidden" 
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.65)', 
+                  border: '1px solid rgba(0, 0, 0, 0.12)' 
+                }}
+              >
+                <span className="input-group-text bg-transparent border-0 pe-1 text-muted">
+                  <span className="material-symbols-outlined text-sm">lock_reset</span>
+                </span>
+                <input 
+                  type="password" 
+                  name="confirmPassword"
+                  className="form-control bg-transparent border-0 ps-1 text-sm py-2.5 text-dark" 
+                  placeholder="Masukkan kembali password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  disabled={loading}
+                  style={{ boxShadow: 'none', color: '#000' }}
+                  required
+                />
+              </div>
             </div>
 
             <button 
               type="submit" 
-              className="btn btn-jsc-lime w-100 py-3 font-bold d-flex align-items-center justify-content-center gap-2"
+              className="btn w-100 py-2.5 font-bold d-flex align-items-center justify-content-center gap-2 rounded-3 shadow-lg"
               disabled={loading}
+              style={{
+                backgroundColor: '#0B0D14',
+                color: '#ffffff',
+                boxShadow: '0 4px 15px rgba(11, 13, 20, 0.25)'
+              }}
             >
               {loading ? (
                 <>
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-                  <span>Mendaftarkan...</span>
+                  <span className="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true" />
+                  <span className="text-white">Mendaftarkan...</span>
                 </>
               ) : (
                 <>
@@ -178,9 +256,9 @@ export default function RegisterPage({ onLoginSuccess }) {
             </button>
           </form>
 
-          <div className="text-center mt-4">
-            <p className="text-xs text-muted mb-0">
-              Sudah memiliki akun? <Link to="/login" className="text-jsc-secondary fw-bold text-decoration-none">Masuk di sini</Link>
+          <div className="text-center mt-4 pt-2 border-top border-dark border-opacity-10">
+            <p className="text-xs mb-0" style={{ color: '#1e293b' }}>
+              Sudah memiliki akun? <Link to="/login" className="fw-bold text-decoration-none" style={{ color: '#0a58ca' }}>Masuk di sini</Link>
             </p>
           </div>
         </div>

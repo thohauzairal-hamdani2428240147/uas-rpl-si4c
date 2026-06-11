@@ -7,7 +7,6 @@ export default function LoginPage({ onLoginSuccess }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [seedStatus, setSeedStatus] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -41,128 +40,128 @@ export default function LoginPage({ onLoginSuccess }) {
     }
   };
 
-  const handleSeedDatabase = async () => {
-    setSeedStatus('seeding');
-    try {
-      await apiService.seedDatabase();
-      setSeedStatus('success');
-      alert('Database berhasil direset dan diisi data awal (seeder)! Hubungkan ulang sesi tes Anda.');
-    } catch (err) {
-      console.error(err);
-      setSeedStatus('failed');
-      const errorMsg = err.response?.data?.message || err.response?.data?.error || err.message;
-      alert(`Gagal me-reset database. Error: ${errorMsg}`);
-    }
-  };
-
   return (
     <div 
-      className="min-vh-100 d-flex align-items-center justify-content-center px-3"
+      className="min-vh-100 d-flex align-items-center justify-content-center px-3 py-5"
       style={{
-        backgroundImage: 'radial-gradient(circle at 10% 20%, rgb(0, 31, 63) 0%, rgb(0, 6, 19) 90.1%)',
-        backgroundColor: '#000613'
+        backgroundImage: 'linear-gradient(to bottom, rgba(9, 13, 22, 0.2), rgba(2, 3, 5, 0.4)), url("/images/hero-banner.svg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundColor: '#020305'
       }}
     >
-      <div className="card border-0 shadow-lg overflow-hidden w-100" style={{ maxWidth: '420px', borderRadius: '16px' }}>
+      <div 
+        className="w-100 shadow-2xl" 
+        style={{ 
+          maxWidth: '420px', 
+          borderRadius: '24px', 
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(121, 255, 91, 0.2) 100%)', 
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.6)',
+          overflow: 'hidden'
+        }}
+      >
         {/* Header Graphic */}
-        <div className="bg-jsc-navy text-white text-center p-4 position-relative">
-          <div 
-            className="position-absolute top-0 start-0 w-100 h-100 opacity-10" 
-            style={{
-              backgroundImage: 'radial-gradient(var(--jsc-secondary-lime) 1px, transparent 0)',
-              backgroundSize: '16px 16px'
-            }}
-          />
-          <span className="material-symbols-outlined text-jsc-lime mb-2" style={{ fontSize: '48px' }}>
-            sports_soccer
-          </span>
-          <h3 className="font-headline-md font-bold mb-1">JSC Arena Booking</h3>
-          <p className="text-white-50 text-xs mb-0">Masuk ke Sistem Manajemen Booking Jakabaring</p>
+        <div className="text-center pt-5 pb-4 px-4">
+          <h3 className="font-headline-md font-bold mb-1" style={{ fontFamily: 'Plus Jakarta Sans', color: '#0B0D14', fontWeight: '800', letterSpacing: '-0.5px' }}>
+            JSC SportPass
+          </h3>
+          <p className="text-muted text-xs mb-0 fw-semibold">Jakabaring Sport City Booking Console</p>
         </div>
 
         {/* Card Body */}
-        <div className="card-body p-4 bg-white">
+        <div className="p-4 pt-0">
           {error && (
-            <div className="alert alert-danger border-0 rounded-3 text-xs p-3 mb-3 d-flex align-items-center gap-2">
+            <div 
+              className="alert alert-danger border-0 text-xs p-3 mb-4 d-flex align-items-center gap-2"
+              style={{ borderRadius: '12px', backgroundColor: 'rgba(239, 68, 68, 0.12)', color: '#b30000', border: '1px solid rgba(239, 68, 68, 0.2)' }}
+            >
               <span className="material-symbols-outlined text-base">error</span>
               <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="mb-3">
-              <label className="form-label text-xs fw-bold text-muted uppercase">Email atau Nickname</label>
-              <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  <span className="material-symbols-outlined text-muted text-sm">person</span>
+              <label className="form-label text-xs fw-bold text-dark text-opacity-75 uppercase mb-2" style={{ letterSpacing: '0.5px' }}>Email atau Nickname</label>
+              <div 
+                className="input-group rounded-3 overflow-hidden" 
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.65)', 
+                  border: '1px solid rgba(0, 0, 0, 0.12)' 
+                }}
+              >
+                <span className="input-group-text bg-transparent border-0 pe-1 text-muted">
+                  <span className="material-symbols-outlined text-sm">person</span>
                 </span>
                 <input 
                   type="text" 
-                  className="form-control bg-light border-start-0 ps-0 text-sm" 
+                  className="form-control bg-transparent border-0 ps-1 text-sm py-2.5 text-dark" 
                   placeholder="Masukkan email atau nickname"
                   value={loginIdentifier}
                   onChange={(e) => setLoginIdentifier(e.target.value)}
                   disabled={loading}
+                  style={{ boxShadow: 'none', color: '#000' }}
+                  required
                 />
               </div>
             </div>
 
             <div className="mb-4">
-              <label className="form-label text-xs fw-bold text-muted uppercase">Password</label>
-              <div className="input-group">
-                <span className="input-group-text bg-light border-end-0">
-                  <span className="material-symbols-outlined text-muted text-sm">lock</span>
+              <label className="form-label text-xs fw-bold text-dark text-opacity-75 uppercase mb-2" style={{ letterSpacing: '0.5px' }}>Password</label>
+              <div 
+                className="input-group rounded-3 overflow-hidden" 
+                style={{ 
+                  backgroundColor: 'rgba(255, 255, 255, 0.65)', 
+                  border: '1px solid rgba(0, 0, 0, 0.12)' 
+                }}
+              >
+                <span className="input-group-text bg-transparent border-0 pe-1 text-muted">
+                  <span className="material-symbols-outlined text-sm">lock</span>
                 </span>
                 <input 
                   type="password" 
-                  className="form-control bg-light border-start-0 ps-0 text-sm" 
+                  className="form-control bg-transparent border-0 ps-1 text-sm py-2.5 text-dark" 
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
+                  style={{ boxShadow: 'none', color: '#000' }}
+                  required
                 />
               </div>
             </div>
 
             <button 
               type="submit" 
-              className="btn btn-jsc-lime w-100 py-3 font-bold d-flex align-items-center justify-content-center gap-2"
+              className="btn w-100 py-2.5 font-bold d-flex align-items-center justify-content-center gap-2 rounded-3 shadow-lg"
               disabled={loading}
+              style={{
+                backgroundColor: '#0B0D14',
+                color: '#ffffff',
+                boxShadow: '0 4px 15px rgba(11, 13, 20, 0.25)'
+              }}
             >
               {loading ? (
                 <>
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
-                  <span>Memproses...</span>
+                  <span className="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true" />
+                  <span className="text-white">Memproses...</span>
                 </>
               ) : (
                 <>
-                  <span>Masuk</span>
-                  <span className="material-symbols-outlined text-sm">login</span>
+                  <span>Masuk Ke Sistem</span>
+                  <span className="material-symbols-outlined text-sm">arrow_forward</span>
                 </>
               )}
             </button>
           </form>
 
-          <div className="text-center mt-4">
-            <p className="text-xs text-muted mb-0">
-              Belum punya akun? <Link to="/register" className="text-jsc-secondary fw-bold text-decoration-none">Daftar Akun Baru</Link>
+          <div className="text-center mt-4 pt-2 border-top border-dark border-opacity-10">
+            <p className="text-xs mb-0" style={{ color: '#1e293b' }}>
+              Belum punya akun? <Link to="/register" className="fw-bold text-decoration-none" style={{ color: '#0a58ca' }}>Daftar Akun Baru</Link>
             </p>
           </div>
-        </div>
-
-        {/* Footer info/seeder */}
-        <div className="card-footer bg-light border-top-0 px-4 py-3 text-center">
-          <button 
-            type="button" 
-            className="btn btn-outline-secondary w-100 py-1.5 text-xs d-flex align-items-center justify-content-center gap-1"
-            onClick={handleSeedDatabase}
-            disabled={seedStatus === 'seeding'}
-          >
-            <span className={`material-symbols-outlined text-xs ${seedStatus === 'seeding' ? 'spin-icon' : ''}`}>
-              sync
-            </span>
-            <span>{seedStatus === 'seeding' ? 'Sedang mereset...' : 'Reset & Seed Database (MySQL)'}</span>
-          </button>
         </div>
       </div>
     </div>

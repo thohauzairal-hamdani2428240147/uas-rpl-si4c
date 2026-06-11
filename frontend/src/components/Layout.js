@@ -24,7 +24,7 @@ export default function Layout({ children, currentUser, onLogout }) {
   };
 
   return (
-    <div className="min-vh-100 bg-light">
+    <div className="min-vh-100 bg-light mesh-gradient-bg">
       
       {/* Sidebar Overlay on mobile */}
       {sidebarOpen && (
@@ -35,11 +35,14 @@ export default function Layout({ children, currentUser, onLogout }) {
       )}
 
       {/* 1. Persistent Sidebar */}
-      <nav className={`jsc-sidebar shadow-sm ${sidebarOpen ? 'open' : ''}`}>
-        <div className="mb-4 px-2 border-bottom border-secondary border-opacity-10 pb-3">
-          <h1 className="font-headline-md text-headline-md font-bold text-white mb-1">JSC Arena</h1>
-          <p className="text-white-50 text-[10px] font-bold uppercase tracking-wider mb-0">Sport City Management</p>
+      <nav className={`jsc-sidebar shadow-sm ${sidebarOpen ? 'open' : ''}`} style={{ backgroundColor: '#0B0D14', borderRight: '1px solid rgba(255, 255, 255, 0.05)' }}>
+        {/* Brand Logo Header */}
+        <div className="p-4">
+          <h1 className="font-headline-lg text-headline-lg text-white font-bold mb-0" style={{ fontSize: '24px', letterSpacing: '-0.5px' }}>JSC SportPass</h1>
+          <p className="text-jsc-lime text-sm mt-1 mb-0 font-semibold">{currentUser ? currentUser.role : 'Guest'} Console</p>
         </div>
+
+
 
         {/* Sidebar Navigation Menu */}
         <div className="d-flex flex-column gap-1 flex-grow-1">
@@ -51,16 +54,16 @@ export default function Layout({ children, currentUser, onLogout }) {
                 to="/"
                 onClick={() => setSidebarOpen(false)}
               >
-                <span className="material-symbols-outlined">calendar_month</span>
-                <span>Jadwal Booking</span>
+                <span className="material-symbols-outlined">dashboard</span>
+                <span>Dashboard</span>
               </Link>
               <Link 
                 className={`sidebar-link ${location.pathname === '/bookings' ? 'active' : ''}`}
                 to="/bookings"
                 onClick={() => setSidebarOpen(false)}
               >
-                <span className="material-symbols-outlined">history</span>
-                <span>Riwayat Booking</span>
+                <span className="material-symbols-outlined">event_available</span>
+                <span>Bookings</span>
               </Link>
             </>
           )}
@@ -73,8 +76,8 @@ export default function Layout({ children, currentUser, onLogout }) {
                 to="/admin/schedule"
                 onClick={() => setSidebarOpen(false)}
               >
-                <span className="material-symbols-outlined">calendar_month</span>
-                <span>Jadwal Staf</span>
+                <span className="material-symbols-outlined">event_available</span>
+                <span>Bookings</span>
               </Link>
               <Link 
                 className={`sidebar-link ${location.pathname === '/staff/scan' ? 'active' : ''}`}
@@ -91,30 +94,33 @@ export default function Layout({ children, currentUser, onLogout }) {
           {currentUser && currentUser.role === 'Admin' && (
             <>
               <Link 
-                className={`sidebar-link ${location.pathname === '/admin' ? 'active' : ''}`}
+                className={`sidebar-link ${location.pathname === '/admin' && location.hash !== '#finances' ? 'active' : ''}`}
                 to="/admin"
-                onClick={() => setSidebarOpen(false)}
+                onClick={() => {
+                  setSidebarOpen(false);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
               >
-                <span className="material-symbols-outlined">monitoring</span>
-                <span>Dasbor Admin</span>
+                <span className="material-symbols-outlined">dashboard</span>
+                <span>Dashboard</span>
               </Link>
               
-              <Link 
-                className={`sidebar-link ${location.pathname === '/admin/schedule' ? 'active' : ''}`}
-                to="/admin/schedule"
-                onClick={() => setSidebarOpen(false)}
-              >
-                <span className="material-symbols-outlined">calendar_month</span>
-                <span>Jadwal Admin</span>
-              </Link>
-
               <Link 
                 className={`sidebar-link ${location.pathname === '/admin/fields' ? 'active' : ''}`}
                 to="/admin/fields"
                 onClick={() => setSidebarOpen(false)}
               >
-                <span className="material-symbols-outlined">sports_soccer</span>
-                <span>Kelola Lapangan</span>
+                <span className="material-symbols-outlined">sports_tennis</span>
+                <span>Facilities</span>
+              </Link>
+
+              <Link 
+                className={`sidebar-link ${location.pathname === '/admin/schedule' ? 'active' : ''}`}
+                to="/admin/schedule"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="material-symbols-outlined">event_available</span>
+                <span>Bookings</span>
               </Link>
 
               <Link 
@@ -122,59 +128,72 @@ export default function Layout({ children, currentUser, onLogout }) {
                 to="/admin/staff"
                 onClick={() => setSidebarOpen(false)}
               >
-                <span className="material-symbols-outlined">badge</span>
-                <span>Kelola Staf</span>
+                <span className="material-symbols-outlined">group</span>
+                <span>Members</span>
+              </Link>
+
+              <Link 
+                className={`sidebar-link ${location.hash === '#finances' ? 'active' : ''}`}
+                to="/admin#finances"
+                onClick={() => {
+                  setSidebarOpen(false);
+                  setTimeout(() => {
+                    const el = document.getElementById('finances-section');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
+              >
+                <span className="material-symbols-outlined">payments</span>
+                <span>Finances</span>
               </Link>
             </>
           )}
+        </div>
 
-          {/* Profile Saya Page Link (Semua Role) */}
+        {/* Bottom Section: Settings & Logout */}
+        <div className="p-3 mt-auto border-top border-secondary border-opacity-10">
           <Link 
             className={`sidebar-link ${location.pathname === '/profile' ? 'active' : ''}`}
             to="/profile"
             onClick={() => setSidebarOpen(false)}
+            style={{ margin: '2px 0' }}
           >
-            <span className="material-symbols-outlined">person</span>
-            <span>Profil Saya</span>
+            <span className="material-symbols-outlined">settings</span>
+            <span>Settings</span>
           </Link>
-
-          <hr className="my-2 border-secondary border-opacity-25" />
-
-          {/* Logout Action */}
           <a 
-            href="#logout" 
+            href="#logout"
             className="sidebar-link text-danger"
             onClick={handleLogoutClick}
+            style={{ margin: '2px 0' }}
           >
             <span className="material-symbols-outlined text-danger">logout</span>
-            <span>Keluar Sesi</span>
+            <span className="text-danger">Log Out</span>
           </a>
-        </div>
 
-        {/* User Avatar Info Footer */}
-        <div className="mt-auto border-top border-secondary border-opacity-25 pt-3">
-          <div className="d-flex align-items-center gap-2 px-2">
+          {/* User Profile Footer */}
+          <div className="d-flex align-items-center gap-3 px-3 pt-3 mt-3 border-top border-secondary border-opacity-10">
             <img 
-              alt="User Avatar" 
-              className="rounded-circle border border-secondary border-opacity-20"
-              style={{ width: '32px', height: '32px', objectFit: 'cover' }}
+              alt="User Profile" 
+              className="rounded-circle"
+              style={{ width: '40px', height: '40px', objectFit: 'cover', border: '2px solid rgba(255,255,255,0.1)' }}
               src={getAvatarUrl()}
             />
-            <div className="text-truncate">
-              <p className="text-white text-xs fw-bold leading-none mb-0 text-truncate">{currentUser ? currentUser.nama : 'Guest'}</p>
-              <p className="text-white-50 text-[10px] leading-none mb-0 mt-1">{currentUser ? currentUser.role : ''}</p>
+            <div className="text-truncate" style={{ lineHeight: '1.2' }}>
+              <p className="text-white text-sm fw-semibold mb-0 text-truncate">{currentUser ? currentUser.nama : 'Guest'}</p>
+              <p className="text-white-50 text-xs mb-0 mt-1">{currentUser ? currentUser.role : ''}</p>
             </div>
           </div>
         </div>
       </nav>
 
       {/* 2. TopBar */}
-      <header className="jsc-topbar shadow-sm">
+      <header className="jsc-topbar shadow-sm" style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
         <div className="d-flex align-items-center gap-2">
           {/* Menu Toggle Button for Mobile */}
           <button 
             type="button" 
-            className="btn btn-link text-primary p-0 d-lg-none d-flex align-items-center justify-content-center border-0"
+            className="btn btn-link text-dark p-0 d-lg-none d-flex align-items-center justify-content-center border-0"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             style={{ width: '40px', height: '40px', textDecoration: 'none' }}
           >
@@ -182,16 +201,18 @@ export default function Layout({ children, currentUser, onLogout }) {
               menu
             </span>
           </button>
-          <h2 className="font-headline-md text-primary mb-0" style={{ fontSize: '1.15rem' }}>
-            JSC Booking System
+          <h2 className="font-headline-md text-dark mb-0" style={{ fontSize: '1.15rem', fontFamily: 'Plus Jakarta Sans', fontWeight: '800', letterSpacing: '-0.5px' }}>
+            JSC SportPass
           </h2>
         </div>
 
         <div className="d-flex align-items-center gap-3">
+
+
           {/* Loyalty Points display for Tenant */}
           {currentUser && currentUser.role === 'Penyewa' && (
-            <div className="badge bg-jsc-lime text-jsc-navy font-label-caps py-2 px-3 d-flex align-items-center gap-1">
-              <span className="material-symbols-outlined text-sm">stars</span>
+            <div className="badge bg-jsc-lime text-jsc-primary font-label-caps py-2 px-3 d-flex align-items-center gap-1 shadow-sm">
+              <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>stars</span>
               <span>{currentUser.poinLoyalitas || 0} Pts</span>
             </div>
           )}
@@ -207,9 +228,9 @@ export default function Layout({ children, currentUser, onLogout }) {
               src={getAvatarUrl()} 
               alt="Avatar Small" 
               className="rounded-circle border"
-              style={{ width: '24px', height: '24px', objectFit: 'cover' }}
+              style={{ width: '28px', height: '28px', objectFit: 'cover' }}
             />
-            <span className="text-sm font-semibold text-primary d-none d-md-block">
+            <span className="text-sm font-semibold text-dark d-none d-md-block">
               {currentUser ? currentUser.nama : ''}
             </span>
           </div>
@@ -222,6 +243,108 @@ export default function Layout({ children, currentUser, onLogout }) {
           {children}
         </div>
       </main>
+
+      {/* 4. Mobile Bottom Navigation Bar */}
+      {currentUser && (
+        <nav className="mobile-bottom-nav">
+          {currentUser.role === 'Penyewa' && (
+            <>
+              <Link 
+                className={`mobile-nav-link ${location.pathname === '/' ? 'active' : ''}`}
+                to="/"
+              >
+                <div className="mobile-icon-wrapper">
+                  <span className="material-symbols-outlined">calendar_month</span>
+                </div>
+                <span>Jadwal</span>
+              </Link>
+              <Link 
+                className={`mobile-nav-link ${location.pathname === '/bookings' ? 'active' : ''}`}
+                to="/bookings"
+              >
+                <div className="mobile-icon-wrapper">
+                  <span className="material-symbols-outlined">history</span>
+                </div>
+                <span>Riwayat</span>
+              </Link>
+            </>
+          )}
+
+          {currentUser.role === 'Staff' && (
+            <>
+              <Link 
+                className={`mobile-nav-link ${location.pathname === '/admin/schedule' ? 'active' : ''}`}
+                to="/admin/schedule"
+              >
+                <div className="mobile-icon-wrapper">
+                  <span className="material-symbols-outlined">calendar_month</span>
+                </div>
+                <span>Jadwal</span>
+              </Link>
+              <Link 
+                className={`mobile-nav-link ${location.pathname === '/staff/scan' ? 'active' : ''}`}
+                to="/staff/scan"
+              >
+                <div className="mobile-icon-wrapper">
+                  <span className="material-symbols-outlined">qr_code_scanner</span>
+                </div>
+                <span>Scan</span>
+              </Link>
+            </>
+          )}
+
+          {currentUser.role === 'Admin' && (
+            <>
+              <Link 
+                className={`mobile-nav-link ${location.pathname === '/admin' ? 'active' : ''}`}
+                to="/admin"
+              >
+                <div className="mobile-icon-wrapper">
+                  <span className="material-symbols-outlined">monitoring</span>
+                </div>
+                <span>Dasbor</span>
+              </Link>
+              <Link 
+                className={`mobile-nav-link ${location.pathname === '/admin/schedule' ? 'active' : ''}`}
+                to="/admin/schedule"
+              >
+                <div className="mobile-icon-wrapper">
+                  <span className="material-symbols-outlined">calendar_month</span>
+                </div>
+                <span>Jadwal</span>
+              </Link>
+              <Link 
+                className={`mobile-nav-link ${location.pathname === '/admin/fields' ? 'active' : ''}`}
+                to="/admin/fields"
+              >
+                <div className="mobile-icon-wrapper">
+                  <span className="material-symbols-outlined">sports_soccer</span>
+                </div>
+                <span>Lapangan</span>
+              </Link>
+              <Link 
+                className={`mobile-nav-link ${location.pathname === '/admin/staff' ? 'active' : ''}`}
+                to="/admin/staff"
+              >
+                <div className="mobile-icon-wrapper">
+                  <span className="material-symbols-outlined">badge</span>
+                </div>
+                <span>Staf</span>
+              </Link>
+            </>
+          )}
+
+          <Link 
+            className={`mobile-nav-link ${location.pathname === '/profile' ? 'active' : ''}`}
+            to="/profile"
+          >
+            <div className="mobile-icon-wrapper">
+              <span className="material-symbols-outlined">person</span>
+            </div>
+            <span>Profil</span>
+          </Link>
+        </nav>
+      )}
 
     </div>
   );

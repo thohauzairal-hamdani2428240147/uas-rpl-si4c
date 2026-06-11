@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bg-glow" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#221508" />
+      <stop offset="100%" stop-color="#05070a" />
+    </radialGradient>
+    
+    <!-- Neon Amber Gradient -->
+    <linearGradient id="amber-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9f1c" />
+      <stop offset="100%" stop-color="#facc15" />
+    </linearGradient>
+
+    <!-- Pitch Line Pattern -->
+    <pattern id="court-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bg-glow)" />
+  <rect width="800" height="600" fill="url(#court-grid)" />
+
+  <!-- Abstract Design Elements -->
+  <circle cx="400" cy="300" r="250" fill="none" stroke="rgba(255, 159, 28, 0.05)" stroke-width="2" />
+  <circle cx="400" cy="300" r="180" fill="none" stroke="url(#amber-glow)" stroke-width="1" stroke-dasharray="10 15" opacity="0.3" />
+
+  <!-- Basketball Graphic -->
+  <g transform="translate(400, 300)">
+    <!-- Hoop Backboard Silhouette -->
+    <rect x="-140" y="-130" width="280" height="180" rx="10" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="3" />
+    <rect x="-60" y="-80" width="120" height="80" fill="none" stroke="rgba(255, 255, 255, 0.07)" stroke-width="2" />
+    
+    <!-- Inner Glow -->
+    <circle cx="0" cy="0" r="90" fill="rgba(255, 159, 28, 0.1)" filter="blur(10px)" />
+    
+    <!-- Basketball Silhouette -->
+    <circle cx="0" cy="0" r="75" fill="#0c0e12" stroke="url(#amber-glow)" stroke-width="5" />
+    
+    <!-- Ribs/Lines on Basketball -->
+    <path d="M -75,0 L 75,0" stroke="url(#amber-glow)" stroke-width="4" />
+    <path d="M 0,-75 L 0,75" stroke="url(#amber-glow)" stroke-width="4" />
+    <path d="M -53,-53 Q 0,0 -53,53" fill="none" stroke="url(#amber-glow)" stroke-width="4" />
+    <path d="M 53,-53 Q 0,0 53,53" fill="none" stroke="url(#amber-glow)" stroke-width="4" />
+  </g>
+
+  <!-- Typography Brand -->
+  <text x="400" y="520" text-anchor="middle" fill="#ff9f1c" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="28" letter-spacing="4">BASKETBALL COURT</text>
+  <text x="400" y="550" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="'JetBrains Mono', monospace" font-weight="500" font-size="12" letter-spacing="1">PROARENA ELITE CLUB</text>
+</svg>

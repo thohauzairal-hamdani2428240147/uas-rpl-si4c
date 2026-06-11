@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 400" width="100%" height="100%">
+  <defs>
+    <!-- Dark Radial Gradient for Premium BG -->
+    <radialGradient id="bg-radial" cx="50%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#0a0d16" />
+      <stop offset="100%" stop-color="#020305" />
+    </radialGradient>
+    
+    <!-- Neon Lime Green Gradient -->
+    <linearGradient id="neon-lime" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#79ff5b" />
+      <stop offset="100%" stop-color="#2ae500" />
+    </linearGradient>
+
+    <!-- Mesh Grid Overlay -->
+    <pattern id="banner-mesh" width="80" height="80" patternUnits="userSpaceOnUse" patternTransform="rotate(15)">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(121, 255, 91, 0.02)" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="2" fill="rgba(121, 255, 91, 0.1)"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Layer -->
+  <rect width="1600" height="400" fill="url(#bg-radial)" />
+  <rect width="1600" height="400" fill="url(#banner-mesh)" />
+
+  <!-- Glowing Abstract Waves / Tracks (Representing Athletics & Speed) -->
+  <path d="M -100 350 Q 300 200 800 280 T 1700 120" fill="none" stroke="rgba(121, 255, 91, 0.15)" stroke-width="8" filter="blur(4px)" />
+  <path d="M -100 350 Q 300 200 800 280 T 1700 120" fill="none" stroke="url(#neon-lime)" stroke-width="3" />
+
+  <path d="M -100 250 Q 400 320 900 150 T 1700 300" fill="none" stroke="rgba(0, 218, 243, 0.12)" stroke-width="6" filter="blur(3px)" />
+  <path d="M -100 250 Q 400 320 900 150 T 1700 300" fill="none" stroke="#00daf3" stroke-width="2" opacity="0.8" />
+
+  <!-- Diagonal Tech Slits -->
+  <g stroke="rgba(121, 255, 91, 0.3)" stroke-width="2">
+    <line x1="100" y1="-20" x2="300" y2="420" stroke-dasharray="15 15" opacity="0.3" />
+    <line x1="140" y1="-20" x2="340" y2="420" stroke-dasharray="5 10" opacity="0.2" />
+    <line x1="1300" y1="-20" x2="1500" y2="420" stroke-dasharray="10 20" opacity="0.3" />
+  </g>
+
+  <!-- Circular Radar / Targets -->
+  <circle cx="1200" cy="200" r="150" fill="none" stroke="rgba(121, 255, 91, 0.04)" stroke-width="1" />
+  <circle cx="1200" cy="200" r="100" fill="none" stroke="url(#neon-lime)" stroke-width="1.5" stroke-dasharray="4 8" opacity="0.25" />
+  <circle cx="1200" cy="200" r="50" fill="none" stroke="rgba(0, 218, 243, 0.2)" stroke-width="1" />
+  <circle cx="1200" cy="200" r="5" fill="#79ff5b" opacity="0.6" />
+</svg>

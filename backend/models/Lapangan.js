@@ -12,7 +12,7 @@ const Lapangan = sequelize.define('Lapangan', {
     allowNull: false
   },
   kategori: {
-    type: DataTypes.ENUM('Futsal', 'Basket', 'Badminton'),
+    type: DataTypes.STRING,
     allowNull: false
   },
   hargaPerJam: {

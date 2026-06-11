@@ -121,60 +121,94 @@ export default function ProfilePage({ currentUser, onProfileUpdated }) {
       <div 
         className="jsc-hero-header position-relative overflow-hidden text-white rounded-4 mb-4 p-5 d-flex flex-column justify-content-end shadow-sm"
         style={{
-          backgroundImage: 'linear-gradient(to top, rgba(0, 6, 19, 0.95), rgba(0, 6, 19, 0.2)), url("https://lh3.googleusercontent.com/aida/AP1WRLsxjKtjytd7fYWMKkifIoVGt1CythKp5sbmRmIu223cCOrl8MVD1_x8YnzUCSnZoZpU84kkb6FH733i-OGdQtiZmGxz9ThmDK7ZQiyNbqtf8JU1X1jIRGMMMyaghsWOyiO-4g_FCmlKj0TkYgXMCLME3Ox07_Lp2sw8zVgIu-uez-eN1n0nx1lIwxxl8Lg_8AylzmvetnlkBgIlzLZkOs06PE87aQyfHo7zvKlV7ThUL8cgpLf5xINs7Q")'
+          backgroundImage: 'linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.4)), url("/images/hero-banner.svg"), url("https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1600")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          borderRadius: '16px'
         }}
       >
-        <span className="badge bg-jsc-lime text-jsc-navy font-label-caps align-self-start mb-2 px-3 py-2">
+        <span 
+          className="badge text-jsc-primary font-label-caps align-self-start mb-2 px-3 py-2 border border-success border-opacity-25"
+          style={{ borderRadius: '999px', backgroundColor: 'rgba(121, 255, 91, 0.2)', color: 'var(--jsc-secondary-lime)' }}
+        >
           Akun Pengguna
         </span>
-        <h1 className="font-headline-lg mb-1">Pengaturan Profil</h1>
+        <h1 className="font-headline-lg mb-1" style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: '800' }}>
+          Pengaturan Profil
+        </h1>
         <p className="text-white-50 font-body-md mb-0">Kelola informasi data diri, foto profil, dan kredensial Anda</p>
       </div>
 
       <div className="row g-4">
         {/* Left Column: Avatar Display & Loyalty Card */}
         <div className="col-12 col-md-4">
-          <div className="card shadow-sm border rounded-3 p-4 mb-4 text-center bg-white">
+          <div className="glass-panel p-4 mb-4 text-center" style={{ borderRadius: '16px' }}>
             <div className="text-center mb-3">
-              <img 
-                src={avatarBase64 || getDefaultAvatar()} 
-                alt="Avatar" 
-                className="rounded-circle border border-4 border-light shadow-sm mb-3"
-                style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-              />
+              <div className="position-relative d-inline-block">
+                <img 
+                  src={avatarBase64 || getDefaultAvatar()} 
+                  alt="Avatar" 
+                  className="rounded-circle border border-4 shadow-sm mb-3"
+                  style={{ 
+                    width: '150px', 
+                    height: '150px', 
+                    objectFit: 'cover',
+                    borderColor: 'var(--jsc-secondary-lime)'
+                  }}
+                />
+              </div>
               <div className="px-2">
                 <label className="form-label text-[10px] text-muted fw-bold uppercase d-block mb-1.5">Pilih Foto Profil Baru</label>
                 <input 
                   type="file" 
-                  className="form-control form-control-sm text-xs bg-light border-0" 
+                  className="form-control form-control-sm text-xs bg-white bg-opacity-50 border border-light" 
                   accept="image/*"
                   onChange={handleFileChange}
+                  style={{ borderRadius: '8px' }}
                 />
                 <p className="text-[9px] text-muted mt-1 mb-0">Format: JPG, PNG. Maksimal 2MB.</p>
               </div>
             </div>
             
-            <h5 className="font-bold text-jsc-primary mb-1">{currentUser.nama}</h5>
+            <h5 className="font-bold text-jsc-primary mb-1" style={{ fontFamily: 'Plus Jakarta Sans', fontSize: '18px' }}>{currentUser.nama}</h5>
             <p className="text-muted text-sm mb-3">@{currentUser.nickname}</p>
 
-            <span className={`badge ${currentUser.role === 'Admin' ? 'bg-danger' : 'bg-jsc-navy'} font-label-caps py-2 px-3 mb-4`}>
+            <span className={`badge ${currentUser.role === 'Admin' ? 'bg-danger' : 'bg-dark'} font-label-caps py-2 px-3 mb-4`} style={{ borderRadius: '6px' }}>
               {currentUser.role}
             </span>
 
-            {/* Loyalty points banner */}
+            {/* Loyalty points banner (Futuristic Sport Pass Design) */}
             {currentUser.role === 'Penyewa' && (
               <div 
-                className="rounded-3 p-3 border-2 border-dashed border-jsc-lime text-start"
-                style={{ backgroundColor: '#fafffa' }}
+                className="rounded-4 p-3 text-start text-white position-relative overflow-hidden shadow-sm border border-secondary border-opacity-10"
+                style={{ 
+                  background: 'linear-gradient(135deg, #05070a 0%, #0d121c 100%)',
+                  borderRadius: '14px'
+                }}
               >
+                {/* Radial glowing element in card */}
+                <div className="position-absolute" style={{ width: '150px', height: '150px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(121, 255, 91, 0.15) 0%, transparent 70%)', top: '-75px', right: '-75px' }}></div>
+                
                 <div className="d-flex align-items-center gap-2 mb-2">
                   <span className="material-symbols-outlined text-jsc-lime">stars</span>
-                  <h6 className="font-bold text-jsc-primary mb-0">Loyalty Rewards</h6>
+                  <h6 className="font-label-caps text-white mb-0" style={{ letterSpacing: '1px' }}>LOYALTY MEMBER</h6>
                 </div>
-                <p className="text-xs text-muted mb-2">Setiap pemesanan lapangan sukses mengumpulkan koin loyalitas.</p>
-                <h3 className="font-bold text-jsc-secondary mb-0">
-                  {currentUser.poinLoyalitas} <span className="text-xs font-semibold text-muted">Koin</span>
-                </h3>
+                <p className="text-white-50 mb-3" style={{ fontSize: '11px' }}>Setiap transaksi pemesanan lapangan menghasilkan koin bonus.</p>
+                
+                <div className="d-flex justify-content-between align-items-end">
+                  <div>
+                    <span className="text-white-50 text-[9px] d-block uppercase font-bold">Saldo Koin</span>
+                    <h3 className="font-bold mb-0 text-white" style={{ fontFamily: 'JetBrains Mono', fontSize: '26px' }}>
+                      {currentUser.poinLoyalitas}
+                    </h3>
+                  </div>
+                  <span 
+                    className="badge text-jsc-primary font-bold text-xs px-2.5 py-1.5"
+                    style={{ backgroundColor: 'var(--jsc-secondary-lime)', borderRadius: '6px' }}
+                  >
+                    PRO ACTIVE
+                  </span>
+                </div>
               </div>
             )}
           </div>
@@ -182,11 +216,11 @@ export default function ProfilePage({ currentUser, onProfileUpdated }) {
 
         {/* Right Column: Profile Form */}
         <div className="col-12 col-md-8">
-          <div className="card shadow-sm border rounded-3 p-4 bg-white">
-            <h4 className="font-headline-md text-jsc-navy mb-4">Ubah Data Diri</h4>
+          <div className="glass-panel p-4" style={{ borderRadius: '16px' }}>
+            <h4 className="font-headline-md text-jsc-primary mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>Ubah Data Diri</h4>
 
             {message.text && (
-              <div className={`alert alert-${message.type} border-0 rounded-3 text-sm p-3 mb-4 d-flex align-items-center gap-2`}>
+              <div className={`alert alert-${message.type} border-0 rounded-3 text-sm p-3 mb-4 d-flex align-items-center gap-2`} style={{ borderRadius: '8px' }}>
                 <span className="material-symbols-outlined">
                   {message.type === 'success' ? 'check_circle' : 'error'}
                 </span>
@@ -201,10 +235,11 @@ export default function ProfilePage({ currentUser, onProfileUpdated }) {
                   <input 
                     type="text" 
                     name="nama"
-                    className="form-control text-sm"
+                    className="form-control text-sm bg-white bg-opacity-70 border border-light"
                     value={formData.nama}
                     onChange={handleChange}
                     disabled={loading}
+                    style={{ borderRadius: '8px', padding: '10px 12px' }}
                   />
                 </div>
 
@@ -213,10 +248,11 @@ export default function ProfilePage({ currentUser, onProfileUpdated }) {
                   <input 
                     type="text" 
                     name="nickname"
-                    className="form-control text-sm"
+                    className="form-control text-sm bg-white bg-opacity-70 border border-light"
                     value={formData.nickname}
                     onChange={handleChange}
                     disabled={loading}
+                    style={{ borderRadius: '8px', padding: '10px 12px' }}
                   />
                 </div>
 
@@ -225,16 +261,17 @@ export default function ProfilePage({ currentUser, onProfileUpdated }) {
                   <input 
                     type="email" 
                     name="email"
-                    className="form-control text-sm"
+                    className="form-control text-sm bg-white bg-opacity-70 border border-light"
                     value={formData.email}
                     onChange={handleChange}
                     disabled={loading}
+                    style={{ borderRadius: '8px', padding: '10px 12px' }}
                   />
                 </div>
 
-                <hr className="my-4 text-muted" />
+                <hr className="my-4 text-muted border-light-subtle" />
 
-                <h5 className="font-bold text-jsc-primary mb-1">Ganti Password (Opsional)</h5>
+                <h5 className="font-bold text-jsc-primary mb-1" style={{ fontFamily: 'Plus Jakarta Sans' }}>Ganti Password (Opsional)</h5>
                 <p className="text-xs text-muted mb-3">Kosongkan kolom di bawah jika tidak ingin mengganti password Anda.</p>
 
                 <div className="col-12 col-md-6">
@@ -242,11 +279,12 @@ export default function ProfilePage({ currentUser, onProfileUpdated }) {
                   <input 
                     type="password" 
                     name="password"
-                    className="form-control text-sm"
+                    className="form-control text-sm bg-white bg-opacity-70 border border-light"
                     placeholder="Masukkan password baru"
                     value={formData.password}
                     onChange={handleChange}
                     disabled={loading}
+                    style={{ borderRadius: '8px', padding: '10px 12px' }}
                   />
                 </div>
 
@@ -255,11 +293,12 @@ export default function ProfilePage({ currentUser, onProfileUpdated }) {
                   <input 
                     type="password" 
                     name="confirmPassword"
-                    className="form-control text-sm"
+                    className="form-control text-sm bg-white bg-opacity-70 border border-light"
                     placeholder="Konfirmasi password baru"
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     disabled={loading}
+                    style={{ borderRadius: '8px', padding: '10px 12px' }}
                   />
                 </div>
               </div>

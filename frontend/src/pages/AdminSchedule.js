@@ -166,9 +166,9 @@ export default function AdminSchedule({ currentUser }) {
   if (currentUser.role !== 'Admin' && currentUser.role !== 'Staff') {
     return (
       <div className="container py-5 text-center">
-        <div className="card border-0 shadow-sm p-5 mx-auto" style={{ maxWidth: '450px' }}>
-          <span className="material-symbols-outlined text-danger text-5xl mb-3" style={{ fontSize: '48px' }}>lock</span>
-          <h4 className="font-headline-md text-jsc-navy mb-2">Akses Terbatas</h4>
+        <div className="glass-panel p-5 mx-auto" style={{ maxWidth: '450px', borderRadius: '16px' }}>
+          <span className="material-symbols-outlined text-danger mb-3" style={{ fontSize: '48px' }}>lock</span>
+          <h4 className="font-headline-md text-jsc-primary mb-2" style={{ fontFamily: 'Plus Jakarta Sans' }}>Akses Terbatas</h4>
           <p className="text-muted text-sm mb-4">
             Halaman ini hanya dapat diakses oleh Staf Kasir atau Administrator.
           </p>
@@ -182,17 +182,19 @@ export default function AdminSchedule({ currentUser }) {
       {/* Header section matching style */}
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3">
         <div>
-          <h2 className="font-headline-lg text-jsc-navy mb-1">Jadwal Admin</h2>
+          <h2 className="font-headline-lg text-jsc-primary mb-1" style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: '800' }}>
+            Jadwal Operasional
+          </h2>
           <p className="text-muted text-sm mb-0">Atur ketersediaan lapangan, manual booking, dan jadwal perbaikan (maintenance).</p>
         </div>
 
         {/* Date Selector */}
         <div className="d-flex gap-2">
-          <div className="bg-white border rounded px-3 py-2 d-flex align-items-center gap-2">
+          <div className="glass-panel rounded px-3 py-2.5 d-flex align-items-center gap-2 border border-light">
             <span className="material-symbols-outlined text-muted text-sm">calendar_today</span>
             <input 
               type="date" 
-              className="border-0 bg-transparent fw-bold text-xs p-0" 
+              className="border-0 bg-transparent fw-bold text-xs p-0 text-jsc-primary" 
               style={{ outline: 'none', cursor: 'pointer' }}
               value={date}
               onChange={(e) => setDate(e.target.value)}
@@ -201,12 +203,12 @@ export default function AdminSchedule({ currentUser }) {
         </div>
       </div>
 
-      {error && <div className="alert alert-danger border-0 rounded-3 mb-4">{error}</div>}
-      {successMsg && <div className="alert alert-success border-0 rounded-3 mb-4">{successMsg}</div>}
+      {error && <div className="alert alert-danger border-0 rounded-3 mb-4" style={{ borderRadius: '8px' }}>{error}</div>}
+      {successMsg && <div className="alert alert-success border-0 rounded-3 mb-4" style={{ borderRadius: '8px' }}>{successMsg}</div>}
 
       {loading ? (
         <div className="text-center py-5">
-          <div className="spinner-border text-primary" role="status">
+          <div className="spinner-border text-dark" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
           <p className="text-muted text-sm mt-2">Memuat jadwal lapangan...</p>
@@ -218,12 +220,19 @@ export default function AdminSchedule({ currentUser }) {
             <div className="row g-4 mb-4">
               {/* Total Revenue Bento */}
               <div className="col-12 col-md-4">
-                <div className="card h-100 p-4 border shadow-sm bg-jsc-primary text-white position-relative overflow-hidden">
+                <div 
+                  className="h-100 p-4 shadow-sm text-white position-relative overflow-hidden"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #05070a 0%, #0d121c 100%)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '16px'
+                  }}
+                >
                   <p className="font-label-caps text-white-50 text-xs mb-1">TOTAL REVENUE (VERIFIED)</p>
-                  <h3 className="font-headline-lg text-white mb-2" style={{ fontSize: '2rem' }}>
+                  <h3 className="font-headline-lg text-white mb-2" style={{ fontSize: '2rem', fontFamily: 'Plus Jakarta Sans', fontWeight: '800' }}>
                     Rp {parseInt(stats.totalPendapatan || 0).toLocaleString('id-ID')}
                   </h3>
-                  <div className="mt-3 d-flex align-items-center gap-1 text-jsc-lime text-xs font-bold">
+                  <div className="mt-3 d-flex align-items-center gap-1.5 text-jsc-lime text-xs font-bold">
                     <span className="material-symbols-outlined text-xs">trending_up</span>
                     <span>+14% from yesterday</span>
                   </div>
@@ -232,34 +241,32 @@ export default function AdminSchedule({ currentUser }) {
 
               {/* Active Bookings Bento */}
               <div className="col-12 col-md-4">
-                <div className="card h-100 p-4 border shadow-sm bg-white">
+                <div className="glass-panel p-4 shadow-sm" style={{ borderRadius: '16px' }}>
                   <p className="font-label-caps text-muted text-xs mb-1">ACTIVE BOOKINGS</p>
-                  <h3 className="font-headline-lg text-jsc-navy mb-2" style={{ fontSize: '2rem' }}>
+                  <h3 className="font-headline-lg text-jsc-primary mb-2" style={{ fontSize: '2rem', fontFamily: 'Plus Jakarta Sans', fontWeight: '800' }}>
                     {stats.activeBookings} Bookings
                   </h3>
-                  <div className="w-100 bg-light h-2 rounded-full mt-3 overflow-hidden">
-                    <div className="bg-success h-full" style={{ width: `${Math.min((stats.activeBookings / 30) * 100, 100)}%` }}></div>
+                  <div className="w-100 bg-black bg-opacity-10 rounded-pill mt-3 overflow-hidden" style={{ height: '8px' }}>
+                    <div className="bg-dark rounded-pill h-100" style={{ width: `${Math.min((stats.activeBookings / 30) * 100, 100)}%` }}></div>
                   </div>
                 </div>
               </div>
 
               {/* Occupancy Bento */}
-              <div className="col-12 col-md-4">
-                <div className="card h-100 p-4 border shadow-sm bg-white">
-                  <p className="font-label-caps text-muted text-xs mb-2">VENUE OCCUPANCY</p>
-                  <div className="d-flex flex-column gap-2">
-                    <div className="d-flex justify-content-between align-items-center text-xs">
-                      <span className="fw-bold">Futsal</span>
-                      <span className="text-muted">{stats.occupancy.Futsal || 0}% Capacity</span>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center text-xs">
-                      <span className="fw-bold">Basketball</span>
-                      <span className="text-muted">{stats.occupancy.Basket || 0}% Capacity</span>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center text-xs">
-                      <span className="fw-bold">Badminton</span>
-                      <span className="text-muted">{stats.occupancy.Badminton || 0}% Capacity</span>
-                    </div>
+              <div className="glass-panel p-4 shadow-sm" style={{ borderRadius: '16px' }}>
+                <p className="font-label-caps text-muted text-xs mb-2">VENUE OCCUPANCY</p>
+                <div className="d-flex flex-column gap-2.5">
+                  <div className="d-flex justify-content-between align-items-center text-xs border-bottom border-light-subtle pb-1">
+                    <span className="fw-bold">Futsal</span>
+                    <span className="badge bg-dark px-2 py-1 text-white font-label-caps text-[9px]">{stats.occupancy.Futsal || 0}%</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center text-xs border-bottom border-light-subtle pb-1">
+                    <span className="fw-bold">Basketball</span>
+                    <span className="badge bg-dark px-2 py-1 text-white font-label-caps text-[9px]">{stats.occupancy.Basket || 0}%</span>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center text-xs">
+                    <span className="fw-bold">Badminton</span>
+                    <span className="badge bg-dark px-2 py-1 text-white font-label-caps text-[9px]">{stats.occupancy.Badminton || 0}%</span>
                   </div>
                 </div>
               </div>
@@ -267,52 +274,52 @@ export default function AdminSchedule({ currentUser }) {
           )}
 
           {/* Schedule Grid Table */}
-          <div className="card shadow-sm border rounded-3 overflow-hidden bg-white mb-4">
-            <div className="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+          <div className="glass-panel rounded-4 overflow-hidden mb-4 shadow-sm" style={{ borderRadius: '16px' }}>
+            <div className="px-4 py-3 border-bottom border-light-subtle d-flex justify-content-between align-items-center bg-white bg-opacity-40">
               <div>
-                <h5 className="font-headline-md text-jsc-navy mb-0">Venue Schedule Grid</h5>
-                <p className="text-muted text-xs mb-0">Klik pada sel slot jadwal untuk mengubah status ketersediaan.</p>
+                <h5 className="font-headline-md text-jsc-primary mb-0" style={{ fontFamily: 'Plus Jakarta Sans', fontSize: '18px' }}>Venue Schedule Grid</h5>
+                <p className="text-muted text-xs mb-0">Klik pada sel slot jadwal untuk mengubah status ketersediaan lapangan secara instan.</p>
               </div>
             </div>
 
             <div className="table-responsive">
-              <table className="table table-bordered align-middle mb-0 text-center" style={{ minWidth: '1000px' }}>
-                <thead className="table-light font-label-caps text-xs">
-                  <tr>
-                    <th className="text-start px-4 sticky-left bg-white z-10" style={{ width: '220px', left: 0 }}>Nama Lapangan</th>
+              <table className="table table-bordered align-middle mb-0 text-center" style={{ minWidth: '1000px', backgroundColor: 'transparent' }}>
+                <thead>
+                  <tr className="border-bottom border-light" style={{ backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
+                    <th className="text-start px-4 sticky-left bg-white bg-opacity-95 z-10 text-xs font-bold text-muted uppercase" style={{ width: '220px', left: 0 }}>Nama Lapangan</th>
                     {timeSlots.map(slot => (
-                      <th key={slot.id} className="py-3 px-2">{slot.label}</th>
+                      <th key={slot.id} className="py-3 px-2 text-xs font-bold text-muted uppercase">{slot.label}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {fields.map(field => (
-                    <tr key={field.id}>
-                      <td className="text-start font-bold px-4 sticky-left bg-white z-10" style={{ left: 0 }}>
-                        {field.namaLapangan}
-                        <div className="text-muted font-normal text-xs">{field.kategori}</div>
+                    <tr key={field.id} className="border-bottom border-light-subtle">
+                      <td className="text-start font-bold px-4 sticky-left bg-white bg-opacity-95 z-10" style={{ left: 0 }}>
+                        <span className="text-jsc-primary d-block text-sm">{field.namaLapangan}</span>
+                        <span className="badge bg-dark text-white font-label-caps text-[9px] px-2 py-0.5 mt-1">{field.kategori}</span>
                       </td>
                       {timeSlots.map(slot => {
                         const { status, booking } = getSlotInfo(field.id, slot);
                         
-                        let cellClass = "";
+                        let cellStyle = {};
                         let statusText = "AVAILABLE";
                         let iconName = "check_circle";
 
                         if (status === 'booked') {
-                          cellClass = "bg-danger text-white";
+                          cellStyle = { backgroundColor: 'var(--jsc-booked)', color: '#ffffff', opacity: 0.9 };
                           statusText = booking?.user?.nama ? booking.user.nama.split(' ')[0].toUpperCase() : "BOOKED";
                           iconName = "block";
                         } else if (status === 'locked') {
-                          cellClass = "hash-pattern bg-warning text-dark border-jsc-locked";
+                          cellStyle = { border: '2px solid var(--jsc-locked)', color: 'var(--jsc-locked)', position: 'relative' };
                           statusText = "LOCKED";
                           iconName = "timer";
                         } else if (status === 'maintenance') {
-                          cellClass = "bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25";
+                          cellStyle = { backgroundColor: 'rgba(0,0,0,0.05)', color: '#75777e', opacity: 0.7 };
                           statusText = "MAINTENANCE";
                           iconName = "settings";
                         } else {
-                          cellClass = "border border-success text-success bg-white hover:bg-success hover:bg-opacity-10";
+                          cellStyle = { border: '1px solid rgba(121,255,91,0.3)', color: '#2ae500', backgroundColor: 'rgba(121, 255, 91, 0.05)' };
                           statusText = "AVAILABLE";
                           iconName = "check_circle";
                         }
@@ -320,8 +327,13 @@ export default function AdminSchedule({ currentUser }) {
                         return (
                           <td key={slot.id} className="p-2" style={{ width: '100px' }}>
                             <div 
-                              className={`rounded d-flex flex-column align-items-center justify-content-center cursor-pointer transition-all ${cellClass}`}
-                              style={{ height: '64px', fontSize: '10px', fontWeight: 'bold' }}
+                              className={`rounded d-flex flex-column align-items-center justify-content-center cursor-pointer transition-all ${status === 'locked' ? 'hash-pattern' : ''}`}
+                              style={{ 
+                                height: '64px', 
+                                fontSize: '10px', 
+                                fontWeight: 'bold',
+                                ...cellStyle
+                              }}
                               onClick={() => handleCellClick(field, slot)}
                             >
                               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>{iconName}</span>
@@ -340,29 +352,29 @@ export default function AdminSchedule({ currentUser }) {
           {/* Legend and Info Section */}
           <div className="row g-4">
             <div className="col-12 col-md-8">
-              <div className="card p-4 border bg-white shadow-sm">
-                <h6 className="fw-bold text-jsc-navy mb-3">Legend & Quick Status Guide</h6>
+              <div className="glass-panel p-4 shadow-sm" style={{ borderRadius: '16px' }}>
+                <h6 className="fw-bold text-jsc-primary mb-3" style={{ fontFamily: 'Plus Jakarta Sans' }}>Legend & Quick Status Guide</h6>
                 <div className="row g-3">
                   <div className="col-6 col-sm-3 d-flex align-items-center gap-2">
-                    <div className="border border-success text-success bg-white d-flex align-items-center justify-content-center rounded" style={{ width: '24px', height: '24px' }}>
+                    <div className="d-flex align-items-center justify-content-center rounded" style={{ width: '28px', height: '28px', border: '1px solid rgba(121,255,91,0.3)', color: '#2ae500', backgroundColor: 'rgba(121, 255, 91, 0.05)' }}>
                       <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>check_circle</span>
                     </div>
                     <span className="text-xs fw-semibold">Available</span>
                   </div>
                   <div className="col-6 col-sm-3 d-flex align-items-center gap-2">
-                    <div className="bg-danger text-white d-flex align-items-center justify-content-center rounded" style={{ width: '24px', height: '24px' }}>
+                    <div className="text-white d-flex align-items-center justify-content-center rounded" style={{ width: '28px', height: '28px', backgroundColor: 'var(--jsc-booked)' }}>
                       <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>block</span>
                     </div>
                     <span className="text-xs fw-semibold">Booked / Lunas</span>
                   </div>
                   <div className="col-6 col-sm-3 d-flex align-items-center gap-2">
-                    <div className="bg-warning text-dark hash-pattern d-flex align-items-center justify-content-center rounded" style={{ width: '24px', height: '24px' }}>
+                    <div className="hash-pattern d-flex align-items-center justify-content-center rounded" style={{ width: '28px', height: '28px', border: '1px solid var(--jsc-locked)', color: 'var(--jsc-locked)' }}>
                       <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>timer</span>
                     </div>
                     <span className="text-xs fw-semibold">Temporary Lock</span>
                   </div>
                   <div className="col-6 col-sm-3 d-flex align-items-center gap-2">
-                    <div className="bg-secondary bg-opacity-25 text-secondary d-flex align-items-center justify-content-center rounded" style={{ width: '24px', height: '24px' }}>
+                    <div className="d-flex align-items-center justify-content-center rounded" style={{ width: '28px', height: '28px', backgroundColor: 'rgba(0,0,0,0.05)', color: '#75777e' }}>
                       <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>settings</span>
                     </div>
                     <span className="text-xs fw-semibold">Maintenance</span>
@@ -372,11 +384,18 @@ export default function AdminSchedule({ currentUser }) {
             </div>
 
             <div className="col-12 col-md-4">
-              <div className="card p-4 border" style={{ backgroundColor: 'rgba(112,93,0,0.05)', borderColor: 'rgba(112,93,0,0.2)' }}>
+              <div 
+                className="p-4 h-100" 
+                style={{ 
+                  backgroundColor: 'rgba(121,255,91,0.05)', 
+                  border: '1px solid rgba(121,255,91,0.2)',
+                  borderRadius: '16px' 
+                }}
+              >
                 <div className="d-flex align-items-start gap-2">
-                  <span className="material-symbols-outlined text-warning" style={{ fontSize: '20px' }}>info</span>
+                  <span className="material-symbols-outlined text-dark" style={{ fontSize: '20px' }}>sync</span>
                   <div>
-                    <h6 className="fw-bold text-warning mb-1">Schedule Sync Status</h6>
+                    <h6 className="fw-bold text-jsc-primary mb-1">Schedule Sync Status</h6>
                     <p className="text-muted text-xs mb-0">Semua perubahan pada grid ini akan segera berimbas langsung ke jadwal yang dilihat oleh Penyewa secara instan.</p>
                   </div>
                 </div>
@@ -388,12 +407,12 @@ export default function AdminSchedule({ currentUser }) {
 
       {/* Edit Slot Status Modal */}
       {modalOpen && selectedSlot && (
-        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 1060 }} tabIndex="-1">
+        <div className="modal show d-block animate-fade-in" style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)', zIndex: 1060 }} tabIndex="-1">
           <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '400px' }}>
-            <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '12px', overflow: 'hidden' }}>
+            <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '16px', overflow: 'hidden' }}>
               
-              <div className="bg-jsc-primary text-white p-4 d-flex justify-content-between align-items-center">
-                <h5 className="modal-title font-headline-md mb-0">Ubah Status Slot</h5>
+              <div className="bg-jsc-primary text-white p-4 d-flex justify-content-between align-items-center" style={{ backgroundColor: '#000000' }}>
+                <h5 className="modal-title font-headline-md mb-0" style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: '800' }}>Ubah Status Slot</h5>
                 <button 
                   type="button" 
                   className="btn btn-link text-white p-0 border-0" 
@@ -404,21 +423,25 @@ export default function AdminSchedule({ currentUser }) {
                 </button>
               </div>
 
-              <div className="modal-body p-4">
-                <div className="mb-4">
-                  <p className="font-label-caps text-muted text-xs mb-1">TARGET SLOT</p>
-                  <p className="fw-bold fs-6 mb-0 text-jsc-navy">
-                    {selectedSlot.field.namaLapangan} | {selectedSlot.slot.start} - {selectedSlot.slot.end}
+              <div className="modal-body p-4 bg-light">
+                <div className="mb-4 p-3 bg-white border rounded-3">
+                  <p className="font-label-caps text-muted text-[10px] mb-1">TARGET SLOT</p>
+                  <p className="fw-bold mb-0 text-jsc-primary" style={{ fontSize: '14px' }}>
+                    {selectedSlot.field.namaLapangan}
+                  </p>
+                  <p className="text-xs text-muted mt-0.5">
+                    {date} &bull; {selectedSlot.slot.start} - {selectedSlot.slot.end}
                   </p>
                 </div>
 
-                <div className="d-flex flex-column gap-2">
-                  <p className="font-label-caps text-muted text-xs mb-1">PILIH STATUS:</p>
+                <div className="d-flex flex-column gap-2.5">
+                  <p className="font-label-caps text-muted text-[10px] mb-1">PILIH STATUS KETERSEDIAAN:</p>
                   
                   <button 
                     type="button" 
-                    className={`btn text-start d-flex justify-content-between align-items-center py-2 px-3 fw-bold shadow-sm ${tempStatus === 'Available' ? 'btn-success text-white' : 'btn-outline-success'}`}
+                    className={`btn text-start d-flex justify-content-between align-items-center py-2.5 px-3 fw-bold border-2 ${tempStatus === 'Available' ? 'btn-success text-white border-success' : 'btn-outline-success border-success bg-white'}`}
                     onClick={() => setTempStatus('Available')}
+                    style={{ borderRadius: '8px' }}
                   >
                     <span>Available (Tersedia)</span>
                     <span className="material-symbols-outlined">check_circle</span>
@@ -426,8 +449,9 @@ export default function AdminSchedule({ currentUser }) {
 
                   <button 
                     type="button" 
-                    className={`btn text-start d-flex justify-content-between align-items-center py-2 px-3 fw-bold shadow-sm ${tempStatus === 'Booked' ? 'btn-danger text-white' : 'btn-outline-danger'}`}
+                    className={`btn text-start d-flex justify-content-between align-items-center py-2.5 px-3 fw-bold border-2 ${tempStatus === 'Booked' ? 'btn-danger text-white border-danger' : 'btn-outline-danger border-danger bg-white'}`}
                     onClick={() => setTempStatus('Booked')}
+                    style={{ borderRadius: '8px' }}
                   >
                     <span>Booked (Manual Booking)</span>
                     <span className="material-symbols-outlined">block</span>
@@ -435,8 +459,9 @@ export default function AdminSchedule({ currentUser }) {
 
                   <button 
                     type="button" 
-                    className={`btn text-start d-flex justify-content-between align-items-center py-2 px-3 fw-bold shadow-sm ${tempStatus === 'Maintenance' ? 'btn-secondary text-white' : 'btn-outline-secondary'}`}
+                    className={`btn text-start d-flex justify-content-between align-items-center py-2.5 px-3 fw-bold border-2 ${tempStatus === 'Maintenance' ? 'btn-secondary text-white border-secondary' : 'btn-outline-secondary border-secondary bg-white'}`}
                     onClick={() => setTempStatus('Maintenance')}
+                    style={{ borderRadius: '8px' }}
                   >
                     <span>Maintenance Lock</span>
                     <span className="material-symbols-outlined">settings</span>
@@ -444,14 +469,15 @@ export default function AdminSchedule({ currentUser }) {
                 </div>
 
                 <div className="mt-4 pt-3 border-top d-flex gap-2">
-                  <button type="button" className="btn btn-light flex-grow-1 py-2 fw-bold" onClick={closeModal}>Batal</button>
+                  <button type="button" className="btn btn-outline-secondary flex-grow-1 py-2 fw-bold text-xs" onClick={closeModal} style={{ borderRadius: '8px' }}>Batal</button>
                   <button 
                     type="button" 
-                    className="btn btn-jsc-navy flex-grow-1 py-2 fw-bold text-white" 
+                    className="btn btn-jsc-navy flex-grow-1 py-2 fw-bold text-xs" 
                     onClick={() => handleUpdateStatus(tempStatus)}
                     disabled={!tempStatus}
+                    style={{ borderRadius: '8px' }}
                   >
-                    Konfirmasi Perubahan
+                    Simpan Perubahan
                   </button>
                 </div>
               </div>
